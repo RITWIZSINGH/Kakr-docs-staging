@@ -1,9 +1,0 @@
-{
-  "label": "Operations & Scaling",
-  "position": 10,
-  "link": {
-    "type": "generated-index",
-    "description": "Stateless design, horizontal scaling, and failure modes.",
-    "slug": "/operations-and-scaling"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "label": "SDKs & Integration",
-  "position": 7,
-  "link": {
-    "type": "generated-index",
-    "description": "Official SDKs and step-by-step integration guides.",
-    "slug": "/sdks-and-integration"
-  }
-}

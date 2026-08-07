@@ -1,0 +1,10 @@
+# Canonical doc tags. Keeping them here stops typo-variants ("un-verified",
+# "Unverified") from creating separate tag pages.
+
+unverified:
+  label: Unverified
+  permalink: /unverified
+  description: >-
+    Pages that contain at least one claim engineering has not yet confirmed against
+    the published OpenAPI spec or production behaviour. Every one is marked in place
+    with a "Needs verification" chip. Start at the Verification Queue for the full list.

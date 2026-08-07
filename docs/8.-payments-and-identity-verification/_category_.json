@@ -1,9 +1,0 @@
-{
-  "label": "Payments & Identity",
-  "position": 8,
-  "link": {
-    "type": "generated-index",
-    "description": "UTXO model, identity-bound intent, and verifiable settlement.",
-    "slug": "/payments-and-identity"
-  }
-}

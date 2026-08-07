@@ -1,9 +1,0 @@
-{
-  "label": "Platform Capabilities",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "description": "Wallet, blockchain-as-a-service, identity, payments, and automation.",
-    "slug": "/platform-capabilities"
-  }
-}

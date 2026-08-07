@@ -1,9 +1,0 @@
-{
-  "label": "API Reference",
-  "position": 6,
-  "link": {
-    "type": "generated-index",
-    "description": "Standard and Enterprise API references.",
-    "slug": "/api-reference"
-  }
-}

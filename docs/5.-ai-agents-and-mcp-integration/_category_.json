@@ -1,9 +1,0 @@
-{
-  "label": "AI Agents & MCP",
-  "position": 5,
-  "link": {
-    "type": "generated-index",
-    "description": "Giving AI agents cryptographic authority via MCP.",
-    "slug": "/ai-agents-and-mcp"
-  }
-}

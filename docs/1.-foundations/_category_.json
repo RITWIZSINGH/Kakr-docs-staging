@@ -1,9 +1,0 @@
-{
-  "label": "Foundations",
-  "position": 1,
-  "link": {
-    "type": "generated-index",
-    "description": "Why shared-secret identity fails, and what PTERI replaces it with.",
-    "slug": "/foundations"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "label": "Threat Model & Cryptography",
-  "position": 9,
-  "link": {
-    "type": "generated-index",
-    "description": "Threats eliminated by design and the cryptographic foundations.",
-    "slug": "/threat-model"
-  }
-}
