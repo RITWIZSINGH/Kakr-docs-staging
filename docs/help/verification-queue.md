@@ -95,16 +95,30 @@ Decide per bullet: is the route deprecated, restricted, self-hosted-only, or is 
 Confirm whether that typo is live in production before anyone "fixes" it in a client.
 :::
 
-### 6. Pricing: the docs and the website disagree
+### 6. Which pricing page is canonical? {#pricing}
 
 **Page:** [Pricing Plans](/docs/product-and-access/pricing-plans)
 
+**Kakr's own site publishes three different pricing tables across two pages.** The docs now follow
+[kakr.ai/platform#pricing](https://kakr.ai/platform#pricing), as instructed, but the conflict is
+live and customer-visible right now.
+
+| Source | Tiers |
+| --- | --- |
+| [kakr.ai/platform#pricing](https://kakr.ai/platform#pricing) — *what these docs follow* | Free $0 · Pro $49 · Enterprise Pteri $299 |
+| [kakr.ai/pricing](https://kakr.ai/pricing) — Identity Trust Layer tab | Pteri Basic $0 · Identity Growth $1,500 · Identity Scale $3,500 · Pteri Enterprise custom |
+| [kakr.ai/pricing](https://kakr.ai/pricing) — Blockchain Infrastructure tab | BaaS Developer $2,500 · BaaS Pro $6,000 · BaaS Enterprise custom |
+| [pteri.org](https://www.pteri.org/) | Starter · Builder · Pro · Enterprise, with prices **masked** (`████/mo`) until you create an account |
+
 | Confirm | |
 | --- | --- |
-| Are paid prices public? | pteri.org masks them (`████/mo`) behind account creation; these docs print `$1,500` and `$3,500`. |
-| Which plan names are current? | pteri.org: *Starter · Builder · Pro · Enterprise*. These docs: *PTERI Basic · Identity Growth · Identity Scale · PTERI Enterprise*, plus separate BaaS tiers. |
-| Paid-tier rate limits | Free tier is corroborated at 3 req/s. The per-tier figures in these docs (200/sec, 500/sec, 300/sec, 800/sec) appear nowhere public. |
-| "Unlimited" | Used for Enterprise throughout. Is it genuinely uncapped, or fair-use? |
+| Which page is canonical? | $49 and $1,500 are both live for what reads as the same product. |
+| Which plan names ship? | Four different naming schemes are in market simultaneously. |
+| Is the Free tier capped monthly? | `/pricing` says 50 calls/month. `/platform` says only 3/sec, no monthly cap. |
+| Are prices public at all? | pteri.org hides them behind signup; kakr.ai prints them on two pages. |
+| Where does BaaS pricing live? | It exists only on `/pricing`, which is the page not being followed. |
+| "Unlimited" | Used for Enterprise agent identities. Genuinely uncapped, or fair-use? |
+| Rate-limit behaviour | What does the API return when you exceed 3/sec — `429`, or a `200` envelope? |
 
 ### 7. Support commitments
 
@@ -163,9 +177,9 @@ Each row states what was checked and how, so you can reproduce it.
 | Question | Finding | How |
 | --- | --- | --- |
 | Which SDKs are published? | npm `liaas-js` v2.0.4 (Nov 2024) and npm `pteri-sdk` v1.1.2 (Feb 2026). **Nothing on PyPI** | Registry APIs |
-| Free-tier rate limit | **3 requests per second** — corroborated by both these docs and the public pteri.org FAQ | pteri.org |
-| Are paid prices public? | **No** — pteri.org masks them until you create a free account | pteri.org |
-| Public plan names | Starter · Builder · Pro · Enterprise | pteri.org |
+| Free-tier rate limit | **3 requests per second** — the one figure every source agrees on (kakr.ai/platform, kakr.ai/pricing, and the pteri.org FAQ) | Three sources |
+| Current plans and prices | Free $0 · Pro $49 · Enterprise Pteri $299, with per-tier rate limits of 3/30/300 per second | kakr.ai/platform#pricing |
+| Are prices public? | On kakr.ai, yes. On pteri.org they are masked until you create an account — the two sites behave differently | Both sites |
 | How are keys issued? | On registration, from the account dashboard. Free tier, no credit card | pteri.org FAQ |
 | Is `kakr.org` valid? | It **redirects to kakr.ai**, which publishes `contact@kakr.ai`. Entity is Kakr Labs Inc. | Live fetch |
 | Support claim | pteri.org states a 24/7 support team plus community support and a Report a Bug page | pteri.org FAQ |

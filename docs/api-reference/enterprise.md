@@ -29,14 +29,15 @@ If you are **not** an Enterprise customer, these APIs are not accessible.
 
 This page describes the shape of the Enterprise offering, not its numbers. None of the following is confirmed by any source we can check, so do not quote it to anyone or plan capacity against it:
 
-* **Rate limits and throughput.** The free tier is documented at **3 requests per second** — both in
-  our own [pricing plans](/docs/product-and-access/pricing-plans) and in the public FAQ on
-  pteri.org. Above free tier, pteri.org says only that "paid plans offer higher limits", so the
-  Enterprise figure is negotiated, not published.
-* **SLAs and uptime.** No service level, availability target, or numeric response target is
-  documented. pteri.org does claim a support team "available 24/7"; that is a marketing claim on the
-  website, not a contractual commitment. The [status page](https://kakrlabs1.statuspage.io/) reports
-  actual state, and is likewise not a commitment.
+* **Rate limits and throughput.** These *are* published: **300 requests per second** on Enterprise
+  Pteri, against 3/sec on Free and 30/sec on Pro. See
+  [pricing plans](/docs/product-and-access/pricing-plans). What is not published is what happens
+  when you exceed the limit, or whether a negotiated ceiling above 300/sec is available.
+* **SLAs and uptime.** Enterprise Pteri advertises a **Custom SLA**, but no availability target,
+  numeric response time, or escalation path is published anywhere — so "custom" means negotiated,
+  not defined. pteri.org separately claims support is "available 24/7"; that is a marketing claim,
+  not a contractual commitment. The [status page](https://kakrlabs1.statuspage.io/) reports actual
+  state, and is likewise not a commitment.
 * **What is technically different.** The published OpenAPI spec describes one API surface with 43 operations. It does not describe a separate Enterprise surface, separate routes, or a separate spec document. Whether Enterprise differs in anything beyond the host it runs against is unconfirmed.
 * **Base URLs.** Whether Standard and Enterprise share a host is unconfirmed. See [Authentication](/docs/api-reference/authentication).
 
