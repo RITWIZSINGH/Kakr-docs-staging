@@ -3,7 +3,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Kakr Labs Documentation',
+  title: 'PTERI Documentation',
   tagline: 'Cryptographic proof of authority — for humans and AI agents.',
   customFields: {
     gaMeasurementId: 'G-1653V7W1ZT',
@@ -24,7 +24,11 @@ const config = {
 
   // Warn instead of failing the build while you're still cleaning up links
   onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -75,46 +79,81 @@ const config = {
           src: 'img/logo.png',
         },
         items: [
+          { to: '/docs/quickstart', label: 'Quickstart', position: 'left' },
+          {
+            type: 'dropdown',
+            label: 'Build',
+            position: 'left',
+            items: [
+              { to: '/docs/platform-capabilities', label: 'Platform Capabilities' },
+              { to: '/docs/api-reference', label: 'API Reference' },
+              { to: '/docs/api-reference/endpoints', label: 'Endpoint Index' },
+              { to: '/docs/sdks-and-integration', label: 'SDKs & Integration' },
+              { to: '/docs/ai-agents-and-mcp', label: 'AI Agents & MCP' },
+            ],
+          },
+          {
+            type: 'dropdown',
+            label: 'Security',
+            position: 'left',
+            items: [
+              { to: '/docs/architecture-and-security', label: 'Architecture & Security' },
+              { to: '/docs/threat-model', label: 'Threat Model' },
+              { to: '/docs/operations-and-scaling', label: 'Operations & Scaling' },
+            ],
+          },
           {
             type: 'docSidebar',
             sidebarId: 'docsSidebar',
             position: 'left',
-            label: 'Documentation',
+            label: 'All docs',
           },
-          { to: '/docs/api-reference', label: 'API Reference', position: 'left' },
+          { to: '/docs/help', label: 'Help', position: 'right' },
           {
-            href: 'https://github.com/RITWIZSINGH/Kakrlabs_documentation',
-            label: 'GitHub',
+            href: 'https://github.com/kakrlabs-Inc/liaas-sdk',
             position: 'right',
+            className: 'navbar-github-link',
+            'aria-label': 'KakrLabs SDKs on GitHub',
+            title: 'KakrLabs SDKs on GitHub',
           },
         ],
       },
       footer: {
         style: 'dark',
         links: [
-
           {
-            title: 'Documentation',
+            title: 'Start here',
             items: [
-              { label: 'Foundations', to: '/docs/foundations' },
-              { label: 'API Reference', to: '/docs/api-reference' },
-              { label: 'SDKs & Integration', to: '/docs/sdks-and-integration' },
+              { label: 'Quickstart', to: '/docs/quickstart' },
+              { label: 'Core Concepts', to: '/docs/core-concepts' },
+              { label: 'Choose your path', to: '/docs/choose-your-path' },
             ],
           },
           {
-            title: 'Product',
+            title: 'Build',
             items: [
-              { label: 'Pricing Plans', to: '/docs/product-and-access' },
+              { label: 'API Reference', to: '/docs/api-reference' },
+              { label: 'Endpoint Index', to: '/docs/api-reference/endpoints' },
+              { label: 'SDKs & Integration', to: '/docs/sdks-and-integration' },
+              { label: 'AI Agents & MCP', to: '/docs/ai-agents-and-mcp' },
+            ],
+          },
+          {
+            title: 'Trust',
+            items: [
+              { label: 'Architecture & Security', to: '/docs/architecture-and-security' },
+              { label: 'Threat Model', to: '/docs/threat-model' },
+              { label: 'Operations & Scaling', to: '/docs/operations-and-scaling' },
               { label: 'Use Cases', to: '/docs/use-cases' },
             ],
           },
           {
             title: 'More',
             items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/RITWIZSINGH/Kakrlabs_documentation',
-              },
+              { label: 'Pricing & access', to: '/docs/product-and-access' },
+              { label: 'Help & support', to: '/docs/help' },
+              { label: 'Status', href: 'https://kakrlabs1.statuspage.io/' },
+              { label: 'SDKs on GitHub', href: 'https://github.com/kakrlabs-Inc/liaas-sdk' },
               { label: 'pteri.org', href: 'https://www.pteri.org' },
               { label: 'Privacy Policy', to: '/privacy-policy' },
             ],
@@ -124,7 +163,7 @@ const config = {
       },
       prism: {
         theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
+        darkTheme: prismThemes.vsDark,
         additionalLanguages: ['bash', 'json'],
       },
     }),
