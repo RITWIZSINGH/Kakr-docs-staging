@@ -1,19 +1,23 @@
 /**
  * KakrLabs / PTERI documentation theme.
- * Palette: emerald (from the cube logo) on paper (light) / deep green-ink (dark).
+ *
+ * Palette: emerald (from the cube logo) as the brand primary, violet as the
+ * secondary accent, on near-black surfaces in dark mode / warm paper in light.
  * Type: Space Grotesk (display) · Inter (body) · JetBrains Mono (code).
+ *
+ * Tokens prefixed --pt-* are ours; --ifm-* are Docusaurus Infima overrides.
  */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* Brand — emerald sampled from the logo (#23c55e family) */
-  --ifm-color-primary: #15a85a;
-  --ifm-color-primary-dark: #139a52;
-  --ifm-color-primary-darker: #12914d;
-  --ifm-color-primary-darkest: #0f7740;
-  --ifm-color-primary-light: #1cb866;
-  --ifm-color-primary-lighter: #22bf6d;
-  --ifm-color-primary-lightest: #46cd86;
+  /* Brand — emerald sampled from the logo */
+  --ifm-color-primary: #12a05a;
+  --ifm-color-primary-dark: #10914f;
+  --ifm-color-primary-darker: #0f8949;
+  --ifm-color-primary-darkest: #0c703c;
+  --ifm-color-primary-light: #16b465;
+  --ifm-color-primary-lighter: #19bd6c;
+  --ifm-color-primary-lightest: #34d183;
 
   /* Type */
   --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
@@ -24,17 +28,47 @@
   --ifm-heading-font-weight: 600;
   --ifm-h1-font-size: 2.4rem;
 
+  /* Semantic surface + text tokens used by our components */
+  --pt-bg: #fbfcfb;
+  --pt-panel: #f6f8f7;
+  --pt-surface: #ffffff;
+  --pt-surface-hover: #f4f9f6;
+  --pt-line: #e2e8e4;
+  --pt-strong: #0f1a15;
+  --pt-muted: #55635c;
+  --pt-dim: #7c8a83;
+
+  --pt-accent: #6d4fd0;
+  --pt-accent-wash: rgba(109, 79, 208, 0.08);
+  --pt-accent-border: rgba(109, 79, 208, 0.28);
+  --pt-ok: #12a05a;
+  --pt-ok-wash: rgba(18, 160, 90, 0.08);
+  --pt-ok-border: rgba(18, 160, 90, 0.3);
+  --pt-warn: #a76a08;
+  --pt-warn-wash: rgba(219, 148, 33, 0.11);
+  --pt-warn-border: rgba(219, 148, 33, 0.34);
+  --pt-danger: #c0392f;
+  --pt-danger-wash: rgba(192, 57, 47, 0.08);
+  --pt-danger-border: rgba(192, 57, 47, 0.28);
+
+  --pt-gradient: linear-gradient(95deg, var(--pt-accent), var(--ifm-color-primary));
+
+  /* GitHub mark, inlined so no external request is made. Used as a CSS mask. */
+  --pt-github-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z'/%3E%3C/svg%3E");
+
   /* Surfaces */
-  --ifm-background-color: #fdfdfc;
-  --ifm-navbar-background-color: rgba(253, 253, 252, 0.85);
+  --ifm-background-color: var(--pt-bg);
+  --ifm-background-surface-color: var(--pt-surface);
+  --ifm-navbar-background-color: rgba(251, 252, 251, 0.82);
   --ifm-code-font-size: 87%;
-  --ifm-code-background: #eef7f1;
-  --ifm-toc-border-color: #e4efe9;
-  --ifm-color-emphasis-300: #cfe5d8;
+  --ifm-code-background: #eef4f0;
+  --ifm-toc-border-color: var(--pt-line);
+  --ifm-color-emphasis-300: #cfdcd5;
 
   --ifm-global-radius: 10px;
   --ifm-navbar-shadow: none;
-  --docusaurus-highlighted-code-line-bg: rgba(21, 168, 90, 0.09);
+  --ifm-navbar-height: 4rem;
+  --docusaurus-highlighted-code-line-bg: rgba(18, 160, 90, 0.09);
 }
 
 [data-theme='dark'] {
@@ -46,16 +80,39 @@
   --ifm-color-primary-lighter: #55de98;
   --ifm-color-primary-lightest: #7de7b3;
 
-  --ifm-background-color: #0f1613;
-  --ifm-background-surface-color: #16201b;
-  --ifm-navbar-background-color: rgba(15, 22, 19, 0.85);
-  --ifm-code-background: #16241c;
-  --ifm-toc-border-color: #243329;
-  --ifm-color-emphasis-300: #2f4438;
+  --pt-bg: #08090f;
+  --pt-panel: #0e1119;
+  --pt-surface: #131823;
+  --pt-surface-hover: #171e2b;
+  --pt-line: #252d3c;
+  --pt-strong: #edf2f7;
+  --pt-muted: #9aa7b7;
+  --pt-dim: #647386;
+
+  --pt-accent: #8b7cf6;
+  --pt-accent-wash: rgba(139, 124, 246, 0.11);
+  --pt-accent-border: rgba(139, 124, 246, 0.32);
+  --pt-ok: #3ddc97;
+  --pt-ok-wash: rgba(61, 220, 151, 0.11);
+  --pt-ok-border: rgba(61, 220, 151, 0.3);
+  --pt-warn: #f0b44d;
+  --pt-warn-wash: rgba(240, 180, 77, 0.11);
+  --pt-warn-border: rgba(240, 180, 77, 0.3);
+  --pt-danger: #f06b68;
+  --pt-danger-wash: rgba(240, 107, 104, 0.1);
+  --pt-danger-border: rgba(240, 107, 104, 0.3);
+
+  --ifm-background-color: var(--pt-bg);
+  --ifm-background-surface-color: var(--pt-panel);
+  --ifm-navbar-background-color: rgba(8, 9, 15, 0.82);
+  --ifm-code-background: rgba(139, 124, 246, 0.1);
+  --ifm-toc-border-color: var(--pt-line);
+  --ifm-color-emphasis-300: #2f3a4c;
+  --ifm-color-emphasis-400: #3b4759;
   --docusaurus-highlighted-code-line-bg: rgba(46, 212, 127, 0.13);
 }
 
-/* ---------- Navbar: frosted, hairline bottom, brand accent ---------- */
+/* ---------- Navbar: frosted, hairline bottom ---------- */
 .navbar {
   backdrop-filter: saturate(160%) blur(12px);
   border-bottom: 1px solid var(--ifm-toc-border-color);
@@ -76,19 +133,86 @@
   font-weight: 500;
   font-size: 0.92rem;
 }
-
-/* ---------- Navbar logo size ---------- */
 .navbar__logo {
-  height: 44px;
+  height: 34px;
 }
 .navbar__logo img {
   height: 100%;
   width: auto;
 }
+/* Wordmark next to the logo, so the header reads as a product not just a glyph */
+.navbar__brand::after {
+  content: 'PTERI Docs';
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--pt-strong);
+  margin-left: 0.1rem;
+}
+@media (max-width: 480px) {
+  .navbar__brand::after {
+    content: 'PTERI';
+  }
+}
 
-/* ---------- Headings: tight display type, h1 with proof-mark rule ---------- */
-h1, h2, h3 {
-  letter-spacing: -0.015em;
+/* GitHub mark instead of a text link. The SVG is inlined as a mask so it inherits
+   the current text colour and flips correctly between light and dark. */
+.navbar-github-link {
+  display: flex;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  margin-left: 0.35rem;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+.navbar-github-link::before {
+  content: '';
+  width: 1.35rem;
+  height: 1.35rem;
+  margin: auto;
+  background-color: var(--pt-muted);
+  transition: background-color 0.15s ease;
+  -webkit-mask-image: var(--pt-github-mark);
+  mask-image: var(--pt-github-mark);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.navbar-github-link:hover {
+  background-color: var(--pt-surface-hover);
+}
+.navbar-github-link:hover::before {
+  background-color: var(--ifm-color-primary);
+}
+/* Docusaurus appends an "external link" glyph to href items — not wanted on an icon. */
+.navbar-github-link svg,
+.navbar-github-link[target='_blank']::after {
+  display: none;
+}
+/* In the mobile drawer the item is a full-width row, so give it a label again. */
+@media (max-width: 996px) {
+  .navbar-sidebar .navbar-github-link {
+    width: auto;
+    gap: 0.6rem;
+  }
+  .navbar-sidebar .navbar-github-link::before {
+    margin: 0;
+  }
+  .navbar-sidebar .navbar-github-link::after {
+    content: 'GitHub';
+    display: inline;
+  }
+}
+
+/* ---------- Headings ---------- */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
 }
 .markdown h1:first-child {
   font-size: 2.4rem;
@@ -100,50 +224,100 @@ h1, h2, h3 {
   height: 3px;
   margin-top: 0.6rem;
   border-radius: 2px;
-  background: linear-gradient(90deg, var(--ifm-color-primary), transparent);
+  background: var(--pt-gradient);
 }
 .markdown h2 {
-  margin-top: 2.4rem;
-  padding-top: 1.2rem;
+  margin-top: 2.6rem;
+  padding-top: 1.3rem;
   border-top: 1px solid var(--ifm-toc-border-color);
+  font-size: 1.45rem;
+}
+.markdown h3 {
+  font-size: 1.1rem;
+  margin-top: 1.8rem;
 }
 
-/* ---------- Sidebar: quiet labels, confident active state ---------- */
-.theme-doc-sidebar-menu {
-  font-size: 0.88rem;
-  padding: 0.75rem;
+/* The "## Next" block that closes every page reads as a footer, not a section */
+.markdown h2:last-of-type {
+  border-top-color: var(--ifm-toc-border-color);
 }
+
+/* ---------- Sidebar ---------- */
+.theme-doc-sidebar-container {
+  background: var(--pt-panel);
+  border-right: 1px solid var(--ifm-toc-border-color) !important;
+}
+.theme-doc-sidebar-menu {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem 2rem;
+}
+
+/* Section dividers injected as html items from sidebars.js */
+.sidebarSection {
+  padding: 1.35rem 0.75rem 0.4rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.63rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pt-dim);
+}
+.menu__list-item:first-child > .sidebarSection {
+  padding-top: 0.5rem;
+}
+
 .menu__list-item-collapsible > .menu__link,
 .menu__list-item-collapsible > .menu__link--sublist {
   font-family: var(--ifm-heading-font-family);
   font-weight: 600;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--ifm-color-emphasis-700);
+  font-size: 0.86rem;
+  letter-spacing: -0.005em;
+  color: var(--pt-strong);
 }
 .menu__link {
   border-radius: 8px;
   line-height: 1.45;
+  color: var(--pt-muted);
+}
+.menu__link:hover {
+  background: var(--pt-surface-hover);
+  color: var(--pt-strong);
 }
 .menu__link--active:not(.menu__link--sublist) {
-  background: linear-gradient(90deg, rgba(21, 168, 90, 0.13), transparent);
+  background: var(--pt-ok-wash);
   border-left: 2px solid var(--ifm-color-primary);
   border-radius: 0 8px 8px 0;
   font-weight: 600;
+  color: var(--pt-strong);
 }
 
 /* ---------- Content polish ---------- */
+.markdown > p:first-of-type {
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--pt-muted);
+}
 .markdown img {
   border-radius: var(--ifm-global-radius);
   border: 1px solid var(--ifm-toc-border-color);
 }
 blockquote {
   border-left: 3px solid var(--ifm-color-primary);
-  background: var(--ifm-code-background);
+  background: var(--pt-surface);
   border-radius: 0 var(--ifm-global-radius) var(--ifm-global-radius) 0;
-  font-style: italic;
+  color: var(--pt-muted);
 }
+
+/* Native <details> accordions (the FAQ pages use these heavily) */
+.markdown details {
+  border: 1px solid var(--pt-line);
+  background: var(--pt-surface);
+  border-radius: var(--ifm-global-radius);
+}
+.markdown details > summary {
+  font-weight: 500;
+}
+
 .markdown table {
   display: table;
   width: 100%;
@@ -152,49 +326,112 @@ blockquote {
   border: 1px solid var(--ifm-toc-border-color);
   border-radius: var(--ifm-global-radius);
   overflow: hidden;
+  font-size: 0.92rem;
 }
 .markdown table th {
-  font-family: var(--ifm-heading-font-family);
-  font-size: 0.82rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  background: var(--ifm-code-background);
+  letter-spacing: 0.12em;
+  color: var(--pt-dim);
+  background: var(--pt-panel);
 }
-.markdown table th, .markdown table td {
+.markdown table th,
+.markdown table td {
   border: none;
   border-bottom: 1px solid var(--ifm-toc-border-color);
+  vertical-align: top;
 }
-.markdown table tr:last-child td { border-bottom: none; }
+.markdown table td {
+  color: var(--pt-muted);
+}
+.markdown table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Wide tables scroll instead of blowing out the page */
+.markdown .tableWrapper,
+.markdown table {
+  max-width: 100%;
+}
 
 /* ---------- Generated category index cards ---------- */
-.card {
+article .card {
   border: 1px solid var(--ifm-toc-border-color);
+  background: var(--pt-surface);
   box-shadow: none;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
-.card:hover {
+article .card:hover {
   border-color: var(--ifm-color-primary);
   transform: translateY(-2px);
 }
-.card h2 {
-  font-size: 1.05rem;
+article .card h2 {
+  font-size: 1.02rem;
   border-top: none;
   padding-top: 0;
   margin-top: 0;
 }
 
-/* ---------- Breadcrumbs + pagination ---------- */
-.breadcrumbs__link { font-size: 0.85rem; }
+/* ---------- Breadcrumbs, TOC, pagination ---------- */
+.breadcrumbs__link {
+  font-size: 0.82rem;
+  font-family: var(--ifm-font-family-monospace);
+}
+.table-of-contents {
+  font-size: 0.82rem;
+  border-left-color: var(--ifm-toc-border-color);
+}
+.table-of-contents__link--active {
+  font-weight: 600;
+}
 .pagination-nav__link {
   border: 1px solid var(--ifm-toc-border-color);
   border-radius: var(--ifm-global-radius);
+  background: var(--pt-surface);
 }
-.pagination-nav__link:hover { border-color: var(--ifm-color-primary); }
+.pagination-nav__link:hover {
+  border-color: var(--ifm-color-primary);
+}
+.pagination-nav__sublabel {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---------- Code ---------- */
+.theme-code-block {
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: none !important;
+}
+code {
+  border: 1px solid transparent;
+}
+
+/* ---------- Search ---------- */
+.navbar__search-input {
+  border-radius: 8px;
+  border: 1px solid var(--pt-line);
+  background-color: var(--pt-surface);
+}
 
 /* ---------- Footer ---------- */
 .footer--dark {
-  --ifm-footer-background-color: #0a0f0c;
-  border-top: 1px solid #243329;
+  --ifm-footer-background-color: #06070b;
+  border-top: 1px solid var(--pt-line);
+}
+.footer__title {
+  font-family: var(--ifm-heading-font-family);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pt-dim);
+}
+.footer__link-item {
+  font-size: 0.88rem;
 }
 
 /* ---------- Mobile: keep the menu toggle visible and well-placed ---------- */
@@ -208,8 +445,15 @@ blockquote {
   .navbar__items--right {
     flex-shrink: 0;
   }
+  .navbar__brand::after {
+    font-size: 0.95rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card, .card:hover { transition: none; transform: none; }
+  article .card,
+  article .card:hover {
+    transition: none;
+    transform: none;
+  }
 }

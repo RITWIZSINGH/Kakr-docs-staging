@@ -1,0 +1,325 @@
+/* Docs MDX components. Tokens come from src/css/custom.css. */
+
+/* ---------------------------------------------------------------- Cards --- */
+
+.cards {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 1.4rem 0 2rem;
+}
+.cards3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .cards,
+  .cards3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  position: relative;
+  display: block;
+  padding: 1.05rem 1.15rem 1.1rem;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--ifm-global-radius);
+  background: var(--pt-surface);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.cardLink:hover {
+  border-color: var(--ifm-color-primary);
+  background: var(--pt-surface-hover);
+  color: inherit;
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.cardLink:hover .cardArrow {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.cardIcon {
+  display: block;
+  font-size: 1.1rem;
+  line-height: 1;
+  margin-bottom: 0.6rem;
+  color: var(--ifm-color-primary);
+}
+.cardEyebrow {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pt-dim);
+  margin-bottom: 0.35rem;
+}
+.cardTitle {
+  display: block;
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  color: var(--pt-strong);
+}
+.cardBody {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--pt-muted);
+}
+.cardBody :global(p:last-child) {
+  margin-bottom: 0;
+}
+.cardArrow {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-primary);
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ------------------------------------------------------------- Callout --- */
+
+.callout {
+  margin: 1.5rem 0;
+  padding: 0.95rem 1.1rem;
+  border: 1px solid;
+  border-radius: var(--ifm-global-radius);
+}
+.calloutTitle {
+  margin: 0 0 0.35rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.calloutBody {
+  font-size: 0.92rem;
+}
+.calloutBody > :last-child {
+  margin-bottom: 0;
+}
+
+.callout_info,
+.callout_note {
+  border-color: var(--pt-accent-border);
+  background: var(--pt-accent-wash);
+}
+.callout_info .calloutTitle,
+.callout_note .calloutTitle {
+  color: var(--pt-accent);
+}
+
+.callout_ok {
+  border-color: var(--pt-ok-border);
+  background: var(--pt-ok-wash);
+}
+.callout_ok .calloutTitle {
+  color: var(--pt-ok);
+}
+
+.callout_warn {
+  border-color: var(--pt-warn-border);
+  background: var(--pt-warn-wash);
+}
+.callout_warn .calloutTitle {
+  color: var(--pt-warn);
+}
+
+.callout_danger {
+  border-color: var(--pt-danger-border);
+  background: var(--pt-danger-wash);
+}
+.callout_danger .calloutTitle {
+  color: var(--pt-danger);
+}
+
+/* ---------------------------------------------------------------- Pill --- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.pill_confirmed,
+.pill_live {
+  background: var(--pt-ok-wash);
+  color: var(--pt-ok);
+}
+.pill_concept {
+  background: var(--pt-accent-wash);
+  color: var(--pt-accent);
+}
+.pill_verify,
+.pill_beta {
+  background: var(--pt-warn-wash);
+  color: var(--pt-warn);
+}
+
+.pillLink {
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.pillLink:hover {
+  border-color: var(--pt-warn-border);
+  color: var(--pt-warn);
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------- Steps --- */
+
+.steps {
+  list-style: none;
+  counter-reset: pt-step;
+  margin: 1.6rem 0 2rem;
+  padding: 0;
+}
+.step {
+  counter-increment: pt-step;
+  position: relative;
+  padding: 0 0 1.6rem 2.6rem;
+  border-left: 1px solid var(--pt-line);
+  margin-left: 0.85rem;
+}
+.step:last-child {
+  border-left-color: transparent;
+  padding-bottom: 0.4rem;
+}
+.step::before {
+  content: counter(pt-step);
+  position: absolute;
+  left: -0.86rem;
+  top: -0.15rem;
+  display: grid;
+  place-items: center;
+  width: 1.72rem;
+  height: 1.72rem;
+  border-radius: 50%;
+  border: 1px solid var(--pt-line);
+  background: var(--pt-surface);
+  color: var(--ifm-color-primary);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.stepTitle {
+  margin: 0.1rem 0 0.5rem;
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+  color: var(--pt-strong);
+}
+.stepBody > :last-child {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------ Endpoint --- */
+
+.endpoint {
+  margin: 0.6rem 0;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--ifm-global-radius);
+  background: var(--pt-surface);
+  overflow: hidden;
+}
+.endpoint[open] {
+  border-color: var(--ifm-color-emphasis-400);
+}
+.endpointHead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+  list-style: none;
+}
+.endpointHead::-webkit-details-marker {
+  display: none;
+}
+.endpointHead:hover {
+  background: var(--pt-surface-hover);
+}
+
+.method {
+  flex: none;
+  min-width: 3.6rem;
+  text-align: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.method_GET {
+  background: var(--pt-accent-wash);
+  color: var(--pt-accent);
+}
+.method_POST {
+  background: var(--pt-ok-wash);
+  color: var(--pt-ok);
+}
+.method_PUT,
+.method_PATCH {
+  background: var(--pt-warn-wash);
+  color: var(--pt-warn);
+}
+.method_DELETE {
+  background: var(--pt-danger-wash);
+  color: var(--pt-danger);
+}
+
+.endpointPath {
+  font-size: 0.82rem;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--pt-strong);
+  word-break: break-all;
+}
+.endpointNote {
+  margin-left: auto;
+  padding-left: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--pt-dim);
+  text-align: right;
+}
+@media (max-width: 768px) {
+  .endpointNote {
+    display: none;
+  }
+}
+
+.endpointBody {
+  padding: 0.9rem 0.95rem 0.4rem;
+  border-top: 1px solid var(--pt-line);
+  font-size: 0.9rem;
+}
+.endpointBody > :last-child {
+  margin-bottom: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .cardLink:hover,
+  .cardArrow {
+    transition: none;
+    transform: none;
+  }
+}
