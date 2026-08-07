@@ -2,6 +2,7 @@
 title: Pricing Plans
 sidebar_label: Pricing plans
 description: The Identity Infrastructure and Litecoin BaaS tiers, what each one includes, and where to manage your subscription.
+tags: [unverified]
 ---
 
 PTERI offers two infrastructure layers for developers and enterprises building on Litecoin.
@@ -10,6 +11,24 @@ PTERI offers two infrastructure layers for developers and enterprises building o
 2. **Litecoin Blockchain-as-a-Service (BaaS)** — scalable blockchain infrastructure without running nodes.
 
 Both services operate on **Litecoin-native infrastructure with deterministic cryptographic verification and optional MWEB privacy support.**
+
+<Callout type="warn" title="These figures do not match the public site">
+
+<Pill kind="verify">Needs verification</Pill>
+
+Two differences worth resolving before this page ships:
+
+- **Prices.** pteri.org deliberately masks its paid tiers (`████/mo`) behind "Pricing unlocks the
+  moment you create a free account". This page publishes `$1,500/month` and `$3,500/month` in
+  plain text. One of the two is wrong about whether pricing is public.
+- **Plan names.** pteri.org sells *Starter · Builder · Pro · Enterprise*. This page sells
+  *PTERI Basic · Identity Growth · Identity Scale · PTERI Enterprise*, plus separate BaaS tiers.
+  A reader comparing the two cannot tell which plan maps to which.
+
+The one figure that **is** corroborated: the free tier's **3 requests per second**, which appears
+both here and in the public FAQ on pteri.org.
+
+</Callout>
 
 ***
 

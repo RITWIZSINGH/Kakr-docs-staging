@@ -42,29 +42,57 @@ So the rule is: send `nodeUrlOrApiAccessKey` as a header everywhere, except on `
 ## Example request
 
 ```bash
-curl -X GET "{BASE_URL}/api/Blocks/blockchain-info" \
+curl -X GET "$BASE_URL/api/Blocks/blockchain-info" \
   -H "nodeUrlOrApiAccessKey: $PTERI_API_KEY"
 ```
 
 And the one operation that takes it as a query parameter:
 
 ```bash
-curl -X GET "{BASE_URL}/api/Wallet/details?nodeUrlOrApiAccessKey=$PTERI_API_KEY&walletName=my-wallet"
+curl -X GET "$BASE_URL/api/Wallet/details?nodeUrlOrApiAccessKey=$PTERI_API_KEY&walletName=my-wallet"
 ```
 
-Replace `{BASE_URL}` with the host you were given. See the warning below before you hard-code one.
+## What the header value is
 
-<Callout type="warn" title="Needs verification">
+The name is literal: the header takes **either** an API access key **or** a Litecoin node URL.
+The SDK repository's own README shows both forms in the same argument position:
+
+```
+"eyJhbGciOi...bA  OR  https://liaasnode.com"
+```
+
+`eyJhbGciOi` is the base64url encoding of `{"alg`, so the access key is a **JWT**. Two consequences:
+
+- **Send the raw key.** No `Bearer` prefix, no other scheme. The header value is the token itself.
+- **A JWT carries an expiry.** Plan for the key to age out rather than assuming it is permanent.
+
+Passing a node URL instead points the operation at that node — which is how self-hosted and
+Enterprise dedicated-node setups are addressed.
+
+## The base URL
+
+```bash
+export BASE_URL="https://liaas-sdk-919521117286.europe-west1.run.app"
+```
+
+That host **does serve the live API**. An unauthenticated `GET /api/Blocks/blockchain-info` against
+it returns a validation error naming `nodeUrlOrApiAccessKey`, which is the API responding, not a
+static file server.
+
+<Callout type="warn" title="Confirm this host before you hard-code it">
 
 <Pill kind="verify">Needs verification</Pill>
 
-Engineering still has to confirm all of the following. Do not treat any of it as settled:
+It works, but it is a raw Cloud Run URL and the spec declares no `servers` block, so nothing marks
+it as *the intended public endpoint*. Treat it as the host that currently answers, not as a stable
+address. Before you bake it into a client, confirm with engineering:
 
-- **The production base URL.** The OpenAPI spec declares no `servers` block, so the document itself does not name a host. `{BASE_URL}` in the examples above is a placeholder.
-- **What the header value actually is.** The name `nodeUrlOrApiAccessKey` suggests it can carry either a node URL or the API access key. We do not know whether you send the raw key, a prefixed string such as `Bearer <key>`, or a node URL — and if both forms are accepted, which one applies to which plan.
-- **Key rotation and revocation.** Whether a key can be rotated or revoked from the dashboard, whether more than one key can be active at once, and whether keys expire.
-- **Key scoping.** Whether a key is scoped to particular endpoint groups, wallets, or environments, or grants access to everything.
-- **Whether Standard and Enterprise share a host.** If they do not, the base URL above differs per plan, and possibly per Enterprise tenant.
+- Whether this is the intended public host, or whether a branded domain is planned.
+- Whether Standard and Enterprise share it. Enterprise dedicated nodes are addressed by passing the
+  node URL in the credential header, so the base URL may differ per tenant.
+- Whether a separate sandbox host exists.
+- Key lifecycle: rotation, revocation, expiry, and how many keys can be active at once.
+- Key scoping: whether one key reaches every operation or is limited to endpoint groups or wallets.
 
 </Callout>
 

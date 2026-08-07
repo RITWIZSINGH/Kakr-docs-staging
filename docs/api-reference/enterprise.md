@@ -29,8 +29,14 @@ If you are **not** an Enterprise customer, these APIs are not accessible.
 
 This page describes the shape of the Enterprise offering, not its numbers. None of the following is confirmed by any source we can check, so do not quote it to anyone or plan capacity against it:
 
-* **Rate limits and throughput.** No published figure exists for either the Standard or the Enterprise tier. "Higher or custom rate limits" means the limit is negotiated, not that we know what it is.
-* **SLAs and uptime.** No service level, availability target, or support response time is documented. The [status page](https://kakrlabs1.statuspage.io/) reports actual state; it is not a commitment.
+* **Rate limits and throughput.** The free tier is documented at **3 requests per second** — both in
+  our own [pricing plans](/docs/product-and-access/pricing-plans) and in the public FAQ on
+  pteri.org. Above free tier, pteri.org says only that "paid plans offer higher limits", so the
+  Enterprise figure is negotiated, not published.
+* **SLAs and uptime.** No service level, availability target, or numeric response target is
+  documented. pteri.org does claim a support team "available 24/7"; that is a marketing claim on the
+  website, not a contractual commitment. The [status page](https://kakrlabs1.statuspage.io/) reports
+  actual state, and is likewise not a commitment.
 * **What is technically different.** The published OpenAPI spec describes one API surface with 43 operations. It does not describe a separate Enterprise surface, separate routes, or a separate spec document. Whether Enterprise differs in anything beyond the host it runs against is unconfirmed.
 * **Base URLs.** Whether Standard and Enterprise share a host is unconfirmed. See [Authentication](/docs/api-reference/authentication).
 
@@ -121,8 +127,13 @@ If you require:
 * Security onboarding
 
 👉 **Contact Sales / Talk to Enterprise**\
-📧 [support@kakrlabs.com](mailto:support@kakrlabs.com) \
-🌐 [https://kakr.org/contact](https://kakr.org/contact)
+📧 [contact@kakr.ai](mailto:contact@kakr.ai) \
+🌐 [https://kakr.ai](https://kakr.ai) → Contact
+
+The address previously listed here was `support@kakrlabs.com`, alongside `https://kakr.org/contact`.
+`kakr.org` redirects to `kakr.ai`, whose published address is `contact@kakr.ai`; the `kakrlabs.com`
+address appears on neither site. <Pill kind="verify">Needs verification</Pill> Confirm which mailbox
+sales actually monitors.
 
 ***
 

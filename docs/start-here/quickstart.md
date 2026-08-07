@@ -11,16 +11,15 @@ connectivity check against the Litecoin blockchain, and a real wallet with a rea
 created through the LiaaS API. Every step is a single copy-pasteable command. Nothing here
 is a sandbox mock — these are the same routes you will call in production.
 
-<Callout type="warn" title="Before you start">
+<Callout type="warn" title="About the host these examples use">
 
-One value in these examples is a placeholder you must replace: **the base URL** — the host
-and scheme that go in front of every `/api/...` path. <Pill kind="verify">Needs verification</Pill>
+<Pill kind="verify">Needs verification</Pill>
 
-The published OpenAPI spec declares no `servers` block, so we will not print a hostname here
-and imply it is the production one. Get the exact base URL for your account from your
-**pteri.org dashboard**, alongside the API key, and use it wherever these examples say
-`{BASE_URL}`. Standard and Enterprise may not share a host — if you are on Enterprise
-running against dedicated nodes, use the host issued with your nodes.
+`https://liaas-sdk-919521117286.europe-west1.run.app` answers these calls today — we checked. But
+it is a raw Cloud Run URL and the OpenAPI spec names no host, so nothing marks it as the intended
+*public* endpoint. If your pteri.org dashboard shows a different base URL, use that one. On
+Enterprise with dedicated nodes, you pass your node URL in the credential header instead — see
+[Authentication](/docs/api-reference/authentication).
 
 Everything else on this page — the routes, the header names, the JSON property names — comes
 straight from the spec.
@@ -51,8 +50,8 @@ never in source control, a browser bundle, or a URL query string.
 # The key you generated in step 2.
 export PTERI_API_KEY="paste-your-api-key-here"
 
-# The base URL from your dashboard — scheme + host, no trailing slash.
-export BASE_URL="{BASE_URL}"
+# The host that currently serves the API. Override it if your dashboard shows another.
+export BASE_URL="https://liaas-sdk-919521117286.europe-west1.run.app"
 ```
 
 Run these in the same terminal you will use for the rest of the page. Every command below

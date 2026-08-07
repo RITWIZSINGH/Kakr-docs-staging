@@ -31,13 +31,28 @@ Start with the [Kakr Labs status page](https://kakrlabs1.statuspage.io/). If the
 
 **[liaas-sdk](https://github.com/kakrlabs-Inc/liaas-sdk)** — the client library monorepo. Each language lives in its own subdirectory. Read the source there when a client behaves differently from the spec, and open issues against that repo rather than the docs.
 
-**[pteri.org](https://www.pteri.org/)** — account sign-up and the dashboard where API keys are generated.
+**[pteri.org](https://www.pteri.org/)** — account sign-up and the dashboard where API keys are generated. Its own Help / Support and "Report a Bug" sections are the route for product questions that are not about the API surface.
 
-<Callout type="warn" title="Support channels are not documented yet">
+## Reaching a human
+
+| Route | What it is |
+| --- | --- |
+| [pteri.org](https://www.pteri.org/) → Help (Support) | The product's own support entry point, including a Report a Bug page. |
+| [kakr.ai](https://kakr.ai) → Contact, or `contact@kakr.ai` | The corporate site for Kakr Labs Inc. `kakr.org` redirects here. |
+| [GitHub issues](https://github.com/kakrlabs-Inc/liaas-sdk/issues) | Client library bugs. Say which language directory you are using. |
+
+<Callout type="warn" title="Response targets are not documented">
 
 <Pill kind="verify">Needs verification</Pill>
 
-The resources above are all self-serve. Which support channel to use for a direct request, who owns it, and how quickly anyone responds are not confirmed here, so this page makes no claim about them. It also states no uptime figure or service level — read the status page for actual platform state.
+pteri.org states that its support team is "available 24/7" and that community support exists. That
+is a claim on the marketing site, not a published SLA — no response-time target, escalation path, or
+per-plan support tier is documented anywhere we can check, and neither is a numeric uptime figure.
+Read the status page for actual platform state.
+
+Some older pages in this documentation set list `support@kakrlabs.com`. That address is not
+published on either pteri.org or kakr.ai and we could not confirm it is monitored — prefer the
+routes in the table above until someone verifies it.
 
 </Callout>
 

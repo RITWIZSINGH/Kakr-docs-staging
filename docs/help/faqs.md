@@ -59,7 +59,9 @@ Our API can be accessed using any programming language that can make HTTP reques
 
 <summary>Why do i need to reload wallets after restarting node?</summary>
 
-When you restart your Blockchain node, the wallet is not loaded automatically for security and resource management reasons. This ensures that only explicitly requested wallets are loaded, reducing the risk of unauthorized access and resource consumption. <Pill kind="verify">Needs verification</Pill> This answer refers to a `/api/Wallet/load-wallet` endpoint taking the wallet name as a `filename` value. **That route is not in the published OpenAPI spec**, which defines 43 operations and no load-wallet among them. It may be a node-level call rather than a LiaaS API call, or it may be out of date. Confirm it before you build against it — see the [Endpoint Index](/docs/api-reference/endpoints) for what the spec does define.
+When you restart your Blockchain node, the wallet is not loaded automatically for security and resource management reasons. This ensures that only explicitly requested wallets are loaded, reducing the risk of unauthorized access and resource consumption.
+
+This answer used to point at a `/api/Wallet/load-wallet` endpoint taking the wallet name as a `filename` value. **That route does not exist.** It is absent from the published OpenAPI spec, and requesting it against the live API returns `404` — the same response as a made-up path. It is presumably a node-level RPC rather than a LiaaS API call. Do not build against it; see the [Endpoint Index](/docs/api-reference/endpoints) for the 43 operations the API does serve.
 
 </details>
 
@@ -77,7 +79,9 @@ Yes, The multi-signature process necessitates the [signing of a signature](/docs
 
 Match on the error message text. The [Developer FAQs and Error Handling](/docs/help/developer-faqs-and-errors) page lists the messages we have documented from the field, with the cause and the fix for each.
 
-There is no status-code table to work from. The published spec documents only `200` for every operation and defines no error response schema, so which HTTP status code accompanies a failure — and whether error messages are stable strings — is not confirmed. <Pill kind="verify">Needs verification</Pill> See the [error reference](/docs/api-reference/errors) for the full picture.
+Watch the status code carefully: **a failed request usually still returns `200`.** The API wraps responses in `{"successful": …, "message": …, "data": …}`, and an operation that ran and failed comes back with `"successful": false` and the reason in `message`. Branch on that field, not on the status code. A missing required header is the exception — that returns `400` with a `problem+json` body.
+
+These shapes were observed against the live API rather than published in the spec, so treat them as accurate-today, not contractual. <Pill kind="verify">Needs verification</Pill> The [error reference](/docs/api-reference/errors) has all three shapes side by side.
 
 </details>
 

@@ -5,22 +5,83 @@ description: The error messages the LiaaS API actually returns, what causes each
 tags: [unverified]
 ---
 
-There is no error-code table on this page. That is deliberate — read the warning first, then use the message table below, which is built from errors we have seen and documented in the field.
+The published OpenAPI spec declares only `200` for all 43 operations, so it is no help here. The
+three response shapes below were instead **observed directly against the live API**, and they are
+the ones your error handling has to cope with.
 
-<Callout type="warn" title="Needs verification">
+<Callout type="warn" title="Observed, not contractual">
 
 <Pill kind="verify">Needs verification</Pill>
 
-**The published OpenAPI spec documents only `200 OK` for every operation.** All 43 operations declare a single `200` response and nothing else. The spec therefore gives us no authoritative list of status codes, no error response schema, and no mapping from failure to code.
-
-We will not invent one. Until engineering publishes the real error contract, treat the following as unknown:
-
-- Which HTTP status codes a failed request can return.
-- The shape of an error response body — field names, whether there is a machine-readable code, whether messages are stable strings.
-- Whether authentication failures, validation failures, and blockchain-level failures are distinguishable from each other.
-- Whether any of the messages below arrive with a non-`200` status, or inside a `200` body.
+These shapes come from live unauthenticated probes, not from a published contract. They are
+accurate as observed, but engineering has not committed to them, and the spec does not describe
+them. Do not treat them as stable until it does.
 
 </Callout>
+
+## The three response shapes
+
+### 1. A required header or parameter is missing → `400`
+
+Content type is `application/problem+json` — the standard
+[RFC 9110 problem detail](https://www.rfc-editor.org/rfc/rfc9110#section-15.5.1) that ASP.NET Core
+emits for model validation. Field names map to the parameter that failed.
+
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "nodeUrlOrApiAccessKey": ["The nodeUrlOrApiAccessKey field is required."]
+  },
+  "traceId": "00-c5d97c3b0ab034f8600d17e42c1641ee-670c24216d838de4-01"
+}
+```
+
+Keep the `traceId`. It is the only correlation handle the API gives you, and it is what support
+will ask for.
+
+### 2. The request is well-formed but fails → `200` with `successful: false`
+
+This is the shape that catches people out. **Application-level failures come back with HTTP `200`.**
+Checking the status code alone will read a failure as a success.
+
+```json
+{
+  "successful": false,
+  "message": "…human-readable failure text…",
+  "data": null
+}
+```
+
+On success the same envelope carries `"successful": true` and a populated `data`. Branch on
+`successful`, not on the status code.
+
+The messages in the table further down arrive in this `message` field.
+
+:::warning For engineering
+Observed `message` values leak internal type names — a bad credential produced
+`The JSON value could not be converted to KakrLabs_SDK_Creator.Core.DTOs.Blocks.Data`. That
+discloses internal namespaces to any unauthenticated caller and should be sanitised.
+:::
+
+### 3. Unknown route → `404` as HTML
+
+A path the API does not serve returns `404` with `text/html`, not JSON. A client that assumes every
+response parses as JSON will throw here rather than surfacing a clean 404.
+
+### Summary
+
+| Situation | Status | Content type | Branch on |
+| --- | --- | --- | --- |
+| Missing required header or parameter | `400` | `application/problem+json` | `errors` object |
+| Operation ran and failed | `200` | `application/json` | `successful === false` |
+| Operation ran and succeeded | `200` | `application/json` | `successful === true` |
+| Route does not exist | `404` | `text/html` | status code |
+
+Still unconfirmed: whether an *invalid* (as opposed to missing) key has its own status, whether
+rate-limit rejections return `429`, and whether `message` strings are stable enough to match on.
 
 ## Known error messages
 

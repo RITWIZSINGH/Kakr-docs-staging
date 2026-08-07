@@ -9,7 +9,7 @@ This index is generated from the [published OpenAPI spec](https://liaas-sdk-9195
 
 The spec is the source of truth. This page mirrors it: every method, path, summary, header, query parameter and request body schema below is taken straight from the spec, with nothing added. Where the two ever disagree, believe the spec.
 
-Paths are shown exactly as the spec declares them. The spec has no `servers` block, so prefix each one with your own `{BASE_URL}`.
+Paths are shown exactly as the spec declares them. The spec has no `servers` block; the host that currently serves them is `https://liaas-sdk-919521117286.europe-west1.run.app` — see [Authentication](/docs/api-reference/authentication) for the caveat on relying on it.
 
 ## Wallet
 
