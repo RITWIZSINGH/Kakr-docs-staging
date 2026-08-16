@@ -120,21 +120,10 @@ Enterprise increases **capacity and isolation**, not trust assumptions.
 
 ### Need Enterprise Access?
 
-If you require:
+If you require dedicated nodes, private infrastructure, a custom SLA, or security onboarding, send
+us your details and the enterprise team will follow up.
 
-* Dedicated nodes
-* Private infrastructure
-* Custom SLAs
-* Security onboarding
-
-👉 **Contact Sales / Talk to Enterprise**\
-📧 [contact@kakr.ai](mailto:contact@kakr.ai) \
-🌐 [https://kakr.ai](https://kakr.ai) → Contact
-
-The address previously listed here was `support@kakrlabs.com`, alongside `https://kakr.org/contact`.
-`kakr.org` redirects to `kakr.ai`, whose published address is `contact@kakr.ai`; the `kakrlabs.com`
-address appears on neither site. <Pill kind="verify">Needs verification</Pill> Confirm which mailbox
-sales actually monitors.
+<EnterpriseContactForm />
 
 ***
 

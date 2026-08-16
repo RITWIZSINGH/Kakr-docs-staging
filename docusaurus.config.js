@@ -1,4 +1,5 @@
 // @ts-check
+import 'dotenv/config';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
@@ -7,6 +8,10 @@ const config = {
   tagline: 'Cryptographic proof of authority — for humans and AI agents.',
   customFields: {
     gaMeasurementId: 'G-1653V7W1ZT',
+    // HubSpot form target, read from .env (or from the host's environment on Vercel).
+    // Public identifiers — see the note in .env.
+    portalId: process.env.PORTAL_ID,
+    formId: process.env.FORM_ID,
   },
   favicon: 'favicon.ico',
   headTags: [

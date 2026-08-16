@@ -2,6 +2,7 @@
 title: PTERI Wallet App
 sidebar_label: Wallet app
 description: The PTERI Wallet keeps private keys on the device and signs challenges for login, payments, and identity-bound intent.
+tags: [unverified]
 ---
 
 The PTERI Wallet is the core client application used for identity verification, authentication, and transaction authorization within the PTERI platform.
@@ -95,7 +96,11 @@ Official Website
 Developer Documentation
 
 
-[https://docs.kakrlabs.com](https://docs.kakrlabs.com)
+You are reading it — start at the [Quickstart](/docs/quickstart).
+
+The previous link here pointed at `https://docs.kakrlabs.com`, which no longer resolves.
+<Pill kind="verify">Needs verification</Pill> Confirm whether that domain is meant to be retired or
+restored, and which host these docs will finally live on.
 
 
 ***

@@ -8,6 +8,7 @@ import {
   Step,
   Steps,
 } from '@site/src/components/Docs';
+import EnterpriseContactForm from '@site/src/components/EnterpriseContactForm';
 
 // Available in every .md/.mdx page without an import.
 export default {
@@ -19,4 +20,5 @@ export default {
   Steps,
   Step,
   Endpoint,
+  EnterpriseContactForm,
 };

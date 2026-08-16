@@ -125,12 +125,16 @@ live and customer-visible right now.
 **Pages:** [Status & Support](/docs/help/status-and-support),
 [Enterprise API](/docs/api-reference/enterprise)
 
+Enterprise enquiries now go through a [HubSpot form](/docs/api-reference/enterprise#need-enterprise-access)
+rather than a published mailbox, which retires the `support@kakrlabs.com` question. What remains:
+
 | Confirm | |
 | --- | --- |
 | The "24/7" claim | pteri.org states support is available 24/7. Is that contractual, and does it hold per plan? |
 | Response targets | None published. Is there one? |
-| `support@kakrlabs.com` | Appears in these docs, on neither pteri.org nor kakr.ai. Live and monitored? |
-| SLA / uptime | No availability target is published anywhere. Is one offered to Enterprise? |
+| SLA / uptime | Enterprise Pteri advertises a "Custom SLA" with no target attached. Is one actually offered? |
+| Non-enterprise support | The form is for enterprise enquiries. Where does a Free or Pro customer go? |
+| Dead docs domain | `docs.kakrlabs.com`, linked from the wallet app page, does not resolve. Retire or restore? |
 
 ### 8. SDK ownership
 

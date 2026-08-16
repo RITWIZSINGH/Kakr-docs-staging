@@ -1,0 +1,133 @@
+.form {
+  margin: 1.5rem 0 2rem;
+  padding: 1.5rem 1.6rem 1.4rem;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--ifm-global-radius);
+  background: var(--pt-surface);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.1rem;
+}
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pt-dim);
+}
+.req {
+  color: var(--pt-warn);
+}
+
+.input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--pt-line);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: var(--pt-strong);
+  font: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px var(--pt-ok-wash);
+}
+/* :user-invalid, not :invalid — the latter matches empty required fields on first
+   paint, so the whole form renders pre-errored before anyone has typed. */
+.input:user-invalid {
+  border-color: var(--pt-danger-border);
+}
+
+.submit {
+  margin-top: 1.3rem;
+  padding: 0.7rem 1.35rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--pt-gradient);
+  color: #06110b;
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 600;
+  font-size: 0.94rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+  transform: none;
+}
+
+.legal {
+  margin: 0.85rem 0 0;
+  font-size: 0.8rem;
+  color: var(--pt-dim);
+}
+
+.error {
+  margin: 1rem 0 0;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--pt-danger-border);
+  background: var(--pt-danger-wash);
+  border-radius: 8px;
+  color: var(--pt-danger);
+  font-size: 0.88rem;
+}
+
+.success {
+  margin: 1.5rem 0 2rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid var(--pt-ok-border);
+  background: var(--pt-ok-wash);
+  border-radius: var(--ifm-global-radius);
+}
+.success strong {
+  color: var(--pt-ok);
+}
+.success p {
+  margin: 0.35rem 0 0;
+  color: var(--pt-muted);
+  font-size: 0.92rem;
+}
+
+.notice {
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--pt-warn-border);
+  background: var(--pt-warn-wash);
+  border-radius: var(--ifm-global-radius);
+  font-size: 0.9rem;
+  color: var(--pt-muted);
+}
+.notice strong {
+  color: var(--pt-warn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .submit,
+  .submit:hover:not(:disabled) {
+    transition: none;
+    transform: none;
+  }
+}

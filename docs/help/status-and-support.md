@@ -37,8 +37,8 @@ Start with the [Kakr Labs status page](https://kakrlabs1.statuspage.io/). If the
 
 | Route | What it is |
 | --- | --- |
+| [Enterprise contact form](/docs/api-reference/enterprise#need-enterprise-access) | Dedicated nodes, private infrastructure, custom SLA, security onboarding. Goes straight to the enterprise team. |
 | [pteri.org](https://www.pteri.org/) → Help (Support) | The product's own support entry point, including a Report a Bug page. |
-| [kakr.ai](https://kakr.ai) → Contact, or `contact@kakr.ai` | The corporate site for Kakr Labs Inc. `kakr.org` redirects here. |
 | [GitHub issues](https://github.com/kakrlabs-Inc/liaas-sdk/issues) | Client library bugs. Say which language directory you are using. |
 
 <Callout type="warn" title="Response targets are not documented">
@@ -50,9 +50,9 @@ is a claim on the marketing site, not a published SLA — no response-time targe
 per-plan support tier is documented anywhere we can check, and neither is a numeric uptime figure.
 Read the status page for actual platform state.
 
-Some older pages in this documentation set list `support@kakrlabs.com`. That address is not
-published on either pteri.org or kakr.ai and we could not confirm it is monitored — prefer the
-routes in the table above until someone verifies it.
+Enterprise enquiries now go through a form rather than a mailbox, so the unconfirmed
+`support@kakrlabs.com` address has been removed from these docs. If a monitored support mailbox
+does exist, it should be added here.
 
 </Callout>
 
