@@ -116,6 +116,7 @@ const config = {
             position: 'left',
             label: 'All docs',
           },
+          { to: '/status', label: 'Status', position: 'right' },
           { to: '/docs/help', label: 'Help', position: 'right' },
           {
             href: 'https://github.com/kakrlabs-Inc/liaas-sdk',
@@ -160,7 +161,7 @@ const config = {
             items: [
               { label: 'Pricing & access', to: '/docs/product-and-access' },
               { label: 'Help & support', to: '/docs/help' },
-              { label: 'Status', href: 'https://kakrlabs1.statuspage.io/' },
+              { label: 'Status', to: '/status' },
               { label: 'SDKs on GitHub', href: 'https://github.com/kakrlabs-Inc/liaas-sdk' },
               { label: 'pteri.org', href: 'https://www.pteri.org' },
               { label: 'Privacy Policy', to: '/privacy-policy' },

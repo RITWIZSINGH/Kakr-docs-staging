@@ -1,75 +1,22 @@
 /**
- * Live platform status, read from the Statuspage v2 API at request time.
+ * Live platform status for use inside docs pages.
  *
- * Deliberately not baked into the build: hardcoding "All systems operational"
- * into static HTML means the docs keep claiming it during an outage. This reads
- * the same feed the status page itself renders from, so it is never staler than
- * the source.
+ * Deliberately fetched at runtime rather than baked into the build: a static
+ * "All Systems Operational" compiled into HTML keeps claiming it during an
+ * outage, which is exactly when someone is reading the page.
  *
- * The API sends `access-control-allow-origin: *`, so the browser can call it
- * directly — no proxy or server route needed. Its cache-control is max-age=10.
- *
- * Base URL comes from `statusPageUrl` in docusaurus.config.js customFields, so
- * pointing this at a self-hosted status page later is a one-line change as long
- * as the replacement serves the same `/api/v2/summary.json` shape.
+ * The full-page version lives at src/pages/status.js and shares the same hook.
  */
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
-
-const DEFAULT_STATUS_URL = 'https://kakrlabs1.statuspage.io';
-
-/** Statuspage overall indicators → our tone tokens. */
-const INDICATOR_TONE = {
-  none: 'ok',
-  minor: 'warn',
-  major: 'danger',
-  critical: 'danger',
-  maintenance: 'info',
-};
-
-/** Statuspage component statuses → label + tone. */
-const COMPONENT_STATE = {
-  operational: {label: 'Operational', tone: 'ok'},
-  degraded_performance: {label: 'Degraded', tone: 'warn'},
-  partial_outage: {label: 'Partial outage', tone: 'warn'},
-  major_outage: {label: 'Major outage', tone: 'danger'},
-  under_maintenance: {label: 'Maintenance', tone: 'info'},
-};
-
-function useStatusSummary(baseUrl) {
-  const [state, setState] = useState({phase: 'loading', data: null});
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`${baseUrl}/api/v2/summary.json`, {signal: controller.signal})
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Status API returned ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => setState({phase: 'ready', data}))
-      .catch((error) => {
-        if (error.name === 'AbortError') {
-          return;
-        }
-        setState({phase: 'error', data: null});
-      });
-
-    return () => controller.abort();
-  }, [baseUrl]);
-
-  return state;
-}
+import {COMPONENT_STATE, INDICATOR_TONE, useStatus} from './useStatus';
 
 /** Compact one-line badge. Use at the top of a page. */
-export function StatusBadge() {
-  const {siteConfig} = useDocusaurusContext();
-  const baseUrl = siteConfig.customFields?.statusPageUrl ?? DEFAULT_STATUS_URL;
-  const {phase, data} = useStatusSummary(baseUrl);
+export function StatusBadge({href}) {
+  const {phase, data, baseUrl} = useStatus();
+  const target = href ?? baseUrl;
 
   const tone = phase === 'ready' ? INDICATOR_TONE[data.status.indicator] ?? 'info' : 'idle';
   const text =
@@ -80,11 +27,7 @@ export function StatusBadge() {
         : data.status.description;
 
   return (
-    <a
-      className={clsx(styles.badge, styles[`tone_${tone}`])}
-      href={baseUrl}
-      target="_blank"
-      rel="noreferrer noopener">
+    <a className={clsx(styles.badge, styles[`tone_${tone}`])} href={target}>
       <span className={styles.dot} aria-hidden="true" />
       <span>{text}</span>
       <span className={styles.badgeLink} aria-hidden="true">
@@ -94,11 +37,9 @@ export function StatusBadge() {
   );
 }
 
-/** Full component breakdown plus any open incidents. */
+/** Component breakdown plus any open incidents, for embedding in a doc page. */
 export default function StatusPanel() {
-  const {siteConfig} = useDocusaurusContext();
-  const baseUrl = siteConfig.customFields?.statusPageUrl ?? DEFAULT_STATUS_URL;
-  const {phase, data} = useStatusSummary(baseUrl);
+  const {phase, data, baseUrl} = useStatus();
 
   if (phase === 'loading') {
     return <p className={styles.muted}>Loading live status…</p>;
@@ -123,7 +64,7 @@ export default function StatusPanel() {
 
   return (
     <div className={styles.panel}>
-      <StatusBadge />
+      <StatusBadge href="/status" />
 
       {incidents.length > 0 && (
         <div className={styles.incidents}>
@@ -181,12 +122,8 @@ export default function StatusPanel() {
       </ul>
 
       <p className={styles.footnote}>
-        Live from the{' '}
-        <a href={baseUrl} target="_blank" rel="noreferrer noopener">
-          Kakr Labs status page
-        </a>
-        . This panel reads the same feed on every page load — it is never a
-        cached claim.
+        Live feed — never a cached claim. See the{' '}
+        <Link to="/status">full status page</Link> for incident history.
       </p>
     </div>
   );
