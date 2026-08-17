@@ -7,7 +7,11 @@ tags: [unverified]
 
 When something breaks, check whether it is the platform or your integration before you write to anyone.
 
-Start with the [Kakr Labs status page](https://kakrlabs1.statuspage.io/). If the platform is healthy there, the next stop depends on what you are stuck on — the table below points you at the primary source for each kind of question.
+## Platform status, right now
+
+<StatusPanel />
+
+If everything above is operational, the problem is on your side — the table below points you at the primary source for each kind of question.
 
 ## Where to go
 

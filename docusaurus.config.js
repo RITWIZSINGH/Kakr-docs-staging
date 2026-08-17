@@ -12,6 +12,9 @@ const config = {
     // Public identifiers — see the note in .env.
     portalId: process.env.PORTAL_ID,
     formId: process.env.FORM_ID,
+    // Status source. Anything serving the Statuspage v2 `/api/v2/summary.json`
+    // shape works here, so self-hosting later is a one-line change.
+    statusPageUrl: process.env.STATUS_PAGE_URL || 'https://kakrlabs1.statuspage.io',
   },
   favicon: 'favicon.ico',
   headTags: [

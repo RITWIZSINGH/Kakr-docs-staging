@@ -1,0 +1,170 @@
+/* Live status panel. Tone tokens come from src/css/custom.css. */
+
+.panel {
+  margin: 1.5rem 0 2rem;
+}
+
+.muted {
+  color: var(--pt-muted);
+  font-size: 0.92rem;
+}
+
+/* ---------------------------------------------------------------- badge --- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--pt-line);
+  border-radius: 999px;
+  background: var(--pt-surface);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--pt-strong);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+.badge:hover {
+  text-decoration: none;
+  color: var(--pt-strong);
+  border-color: currentColor;
+}
+.badgeLink {
+  color: var(--pt-dim);
+  font-size: 0.7rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+/* Tone drives only the dot and the state text, so the badge stays readable. */
+.tone_ok .dot,
+.tone_ok {
+  color: var(--pt-ok);
+}
+.tone_warn .dot,
+.tone_warn {
+  color: var(--pt-warn);
+}
+.tone_danger .dot,
+.tone_danger {
+  color: var(--pt-danger);
+}
+.tone_info .dot,
+.tone_info {
+  color: var(--pt-accent);
+}
+.tone_idle .dot,
+.tone_idle {
+  color: var(--pt-dim);
+}
+
+/* The badge's own label should stay body-coloured even when the tone is set. */
+.badge.tone_ok,
+.badge.tone_warn,
+.badge.tone_danger,
+.badge.tone_info,
+.badge.tone_idle {
+  color: var(--pt-strong);
+}
+.badge.tone_ok .dot {
+  background: var(--pt-ok);
+}
+.badge.tone_warn .dot {
+  background: var(--pt-warn);
+}
+.badge.tone_danger .dot {
+  background: var(--pt-danger);
+}
+.badge.tone_info .dot {
+  background: var(--pt-accent);
+}
+.badge.tone_idle .dot {
+  background: var(--pt-dim);
+}
+
+/* ------------------------------------------------------------ component --- */
+
+.sectionLabel {
+  margin: 1.5rem 0 0.6rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pt-dim);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--ifm-global-radius);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--pt-surface);
+  border-bottom: 1px solid var(--pt-line);
+  font-size: 0.9rem;
+}
+.row:last-child {
+  border-bottom: none;
+}
+
+.rowName {
+  color: var(--pt-strong);
+  word-break: break-word;
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- incident --- */
+
+.incidents {
+  margin-top: 0.5rem;
+}
+
+.incident {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--pt-warn-border);
+  background: var(--pt-warn-wash);
+  border-radius: var(--ifm-global-radius);
+  color: var(--pt-strong);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.incident:hover {
+  text-decoration: none;
+  color: var(--pt-strong);
+  border-color: var(--pt-warn);
+}
+
+.footnote {
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--pt-dim);
+}
