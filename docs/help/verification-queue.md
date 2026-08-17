@@ -134,7 +134,8 @@ rather than a published mailbox, which retires the `support@kakrlabs.com` questi
 | Response targets | None published. Is there one? |
 | SLA / uptime | Enterprise Pteri advertises a "Custom SLA" with no target attached. Is one actually offered? |
 | Non-enterprise support | The form is for enterprise enquiries. Where does a Free or Pro customer go? |
-| Dead docs domain | `docs.kakrlabs.com`, linked from the wallet app page, does not resolve. Retire or restore? |
+| Statuspage component names | The status page still monitors `https://docs.kakrlabs.com`, `https://www.kakr.org` and `https://pteri.kakr.org`. The first is retired and the other two redirect to `kakr.ai`. Rename them in the Statuspage dashboard. |
+| Statuspage sample incident | "This is an example incident" from Feb 2024 is still in the incident history and renders on [/status](/status). Delete it in the dashboard. |
 
 ### 8. SDK ownership
 
@@ -186,6 +187,7 @@ Each row states what was checked and how, so you can reproduce it.
 | Are prices public? | On kakr.ai, yes. On pteri.org they are masked until you create an account — the two sites behave differently | Both sites |
 | How are keys issued? | On registration, from the account dashboard. Free tier, no credit card | pteri.org FAQ |
 | Is `kakr.org` valid? | It **redirects to kakr.ai**, which publishes `contact@kakr.ai`. Entity is Kakr Labs Inc. | Live fetch |
+| Which docs domain is live? | **`docs.kakr.ai`** — returns 200. Both `docs.kakrlabs.com` and `docs.pteri.org` fail to resolve. The site config previously declared the dead `docs.pteri.org` as its canonical URL. | Live fetch |
 | Support claim | pteri.org states a 24/7 support team plus community support and a Report a Bug page | pteri.org FAQ |
 
 ## Next

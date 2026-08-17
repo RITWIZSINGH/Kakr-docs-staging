@@ -24,7 +24,7 @@ const config = {
     { tagName: 'link', attributes: { rel: 'manifest', href: '/site.webmanifest' } },
   ],
 
-  url: 'https://docs.pteri.org', // change to your real docs domain before deploying
+  url: 'https://docs.kakr.ai',
   baseUrl: '/',
 
   organizationName: 'RITWIZSINGH',

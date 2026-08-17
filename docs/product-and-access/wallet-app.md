@@ -96,11 +96,11 @@ Official Website
 Developer Documentation
 
 
-You are reading it — start at the [Quickstart](/docs/quickstart).
+You are reading it — start at the [Quickstart](/docs/quickstart). These docs live at
+[docs.kakr.ai](https://docs.kakr.ai).
 
-The previous link here pointed at `https://docs.kakrlabs.com`, which no longer resolves.
-<Pill kind="verify">Needs verification</Pill> Confirm whether that domain is meant to be retired or
-restored, and which host these docs will finally live on.
+The previous link here pointed at `docs.kakrlabs.com`, which no longer resolves. That domain is
+retired.
 
 
 ***
