@@ -102,9 +102,12 @@ The per-second figure is the one that shapes your integration. At Free you have 
 second, which is enough to work through the [Quickstart](/docs/quickstart) and build against the
 API, but not enough to serve production traffic.
 
-The API does not document what happens when you exceed your limit — see
-[Errors](/docs/api-reference/errors) for the response shapes we have confirmed, and treat
-rate-limit behaviour as unverified until engineering says otherwise.
+These limits **are enforced** at the API gateway, per customer — they are not advisory. Build
+retry-with-backoff into any client that could burst above its tier.
+
+What the API returns when you cross the limit is not documented yet.
+<Pill kind="verify">Needs verification</Pill> See [Errors](/docs/api-reference/errors) for the
+response shapes we have confirmed, and assume nothing about the rejection shape until it is.
 
 <Callout type="warn" title="kakr.ai lists a second, different set of plans">
 

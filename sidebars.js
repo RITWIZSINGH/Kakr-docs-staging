@@ -267,6 +267,7 @@ const sidebars = {
       items: [
         'help/faqs',
         'help/developer-faqs-and-errors',
+        'help/troubleshooting',
         'help/status-and-support',
         'help/verification-queue',
       ],

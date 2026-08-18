@@ -61,7 +61,7 @@ Three response shapes are now documented from live probes. Two questions remain,
 | Confirm | |
 | --- | --- |
 | Is `200` + `successful: false` deliberate? | Returning application failures with a success status is unusual and will trip up clients that branch on status code. |
-| Rate-limit rejections | Does exceeding 3 req/s return `429`, or a `200` envelope? |
+| Rate-limit rejections | Limits **are** enforced at the gateway. What does a rejection look like — `429`, or a `200` envelope? |
 | Message stability | Are `message` strings stable enough for clients to match on? |
 | **Leaked internals** | A bad credential returns `The JSON value could not be converted to KakrLabs_SDK_Creator.Core.DTOs.Blocks.Data`. That exposes internal namespaces to unauthenticated callers and should be sanitised. |
 
@@ -118,7 +118,7 @@ live and customer-visible right now.
 | Are prices public at all? | pteri.org hides them behind signup; kakr.ai prints them on two pages. |
 | Where does BaaS pricing live? | It exists only on `/pricing`, which is the page not being followed. |
 | "Unlimited" | Used for Enterprise agent identities. Genuinely uncapped, or fair-use? |
-| Rate-limit behaviour | What does the API return when you exceed 3/sec — `429`, or a `200` envelope? |
+| Rate-limit rejection shape | Enforcement is confirmed; the response you get when you cross the limit is not. |
 
 ### 7. Support commitments
 

@@ -27,12 +27,13 @@ If you are **not** an Enterprise customer, these APIs are not accessible.
 
 <Pill kind="verify">Needs verification</Pill>
 
-This page describes the shape of the Enterprise offering, not its numbers. None of the following is confirmed by any source we can check, so do not quote it to anyone or plan capacity against it:
+This page describes the shape of the Enterprise offering. Rate limits are now confirmed; the rest of the commercial terms below are not, so do not quote them or plan capacity against them:
 
-* **Rate limits and throughput.** These *are* published: **300 requests per second** on Enterprise
-  Pteri, against 3/sec on Free and 30/sec on Pro. See
-  [pricing plans](/docs/product-and-access/pricing-plans). What is not published is what happens
-  when you exceed the limit, or whether a negotiated ceiling above 300/sec is available.
+* **Rate limits and throughput.** <Pill kind="confirmed">Confirmed</Pill> **300 requests per second**
+  on Enterprise Pteri, against 3/sec on Free and 30/sec on Pro — see
+  [pricing plans](/docs/product-and-access/pricing-plans). These are enforced at the gateway per
+  customer, not advisory. Still open: the response shape when you cross the limit, and whether a
+  ceiling above 300/sec can be negotiated.
 * **SLAs and uptime.** Enterprise Pteri advertises a **Custom SLA**, but no availability target,
   numeric response time, or escalation path is published anywhere — so "custom" means negotiated,
   not defined. pteri.org separately claims support is "available 24/7"; that is a marketing claim,
