@@ -75,30 +75,26 @@ Enterprise dedicated-node setups are addressed.
 export BASE_URL="https://pteri.xyz"
 ```
 
-`pteri.xyz` is the gateway developers should build against. Point your clients there.
+That is the gateway. Point every client at it.
 
-<Callout type="warn" title="The gateway is not serving yet">
+<Callout type="warn" title="A bad key returns 404, not 401">
 
-<Pill kind="verify">Needs verification</Pill>
+This one will cost you an afternoon if you do not know it.
 
-As of the last check, `https://pteri.xyz` resolves — it answers as Kestrel behind Caddy — but
-returns `404` for every API path, with or without a credential header. `/`, `/swagger`, `/health`
-and all `/api/...` routes are unrouted.
+The gateway does **not** answer an unrecognised credential with `401`. It returns **`404` with an
+empty body** — the same response you get for a path that does not exist. We confirmed this by
+probing every plausible header name (`nodeUrlOrApiAccessKey`, `apikey`, `x-api-key`,
+`Authorization: Bearer`) with an invalid value: all `404`, on paths that are known to exist.
 
-So do not expect the examples in these docs to run against it today. Until the gateway is live, the
-host that actually answers is:
+So if a route you are certain about returns `404`, **check your key before you check the path.**
 
-```bash
-export BASE_URL="https://liaas-sdk-919521117286.europe-west1.run.app"
-```
-
-That is a raw Cloud Run URL and not a long-term address — treat it as a stopgap for local
-development only, and switch to `pteri.xyz` the moment it starts routing.
-
-Enterprise customers running dedicated nodes address them by passing the node URL in the credential
-header instead of changing the base URL.
+A side effect worth knowing: you cannot tell from outside whether a given route exists, because an
+unauthenticated probe of a real route is indistinguishable from a missing one.
 
 </Callout>
+
+Enterprise customers running dedicated nodes address them by passing the node URL in the credential
+header rather than changing the base URL.
 
 ## Other request headers
 

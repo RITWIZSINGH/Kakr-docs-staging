@@ -44,15 +44,19 @@ Send `nodeUrlOrApiAccessKey` as a **request header** on every call. The one exce
 `GET /api/Wallet/details`, which takes it as a **query parameter** instead. See
 [Authentication](/docs/api-reference/authentication).
 
+## I get a 404 on a route I know exists
+
+**Check your API key first.** The gateway returns `404` with an empty body when it does not
+recognise your credential — not `401`. An unrecognised key and a non-existent path look identical
+from the client side.
+
+Only once the key is confirmed good is a `404` evidence that the path is wrong. Check it against
+the [Endpoint Index](/docs/api-reference/endpoints).
+
 ## The response is HTML and my JSON parser threw
 
-You hit a route the API does not serve. Unknown paths return `404` as `text/html`, so
-`JSON.parse` fails before you can read a status.
-
-Check the path against the [Endpoint Index](/docs/api-reference/endpoints) — every entry there is
-mirrored from the published spec and verified to exist. Paths that look plausible but are **not**
-served include `/api/Wallet/load-wallet`, `/api/Utilities/SignMessage`, `/api/Utilities/VerifyMessage`
-and `/api/Utilities/encode-msg`. Guard your client against non-JSON responses regardless:
+Distinct from the above: the origin API (behind the gateway) answers unknown paths with `404` as
+`text/html`, so `JSON.parse` throws before you can read a status. Guard for it:
 
 ```js
 const ct = res.headers.get('content-type') ?? '';

@@ -24,22 +24,20 @@ that is the contract" before it becomes a promise to customers.
 
 ## Open — still need an answer
 
-### 1. The `pteri.xyz` gateway is not routing
+### 1. Response schemas for all 43 operations
 
-**Pages:** [Authentication](/docs/api-reference/authentication), [Quickstart](/docs/quickstart)
+**Page:** [Endpoint Index](/docs/api-reference/endpoints)
 
-`pteri.xyz` is confirmed as the base URL developers should use, and the docs now say so. But the
-host returns `404` for every API path — with and without a credential header, on `/`, `/swagger`,
-`/health` and all `/api/...` routes. It answers as Kestrel behind Caddy, so something is deployed;
-nothing is routed.
+The spec documents requests fully — headers, query parameters, request body schemas — and **no**
+operation defines a response. The envelope is known to be `{ successful, message, data }`; what sits
+inside `data` is undocumented for every single one of the 43.
 
-Until it serves, every example in these docs fails against the documented host.
+A developer calling `/api/Wallet/balance` cannot know the field name or type of the balance without
+calling it and reading what comes back. Same for `address-details`, `transaction-details`, and the
+rest.
 
-| Confirm | |
-| --- | --- |
-| When does the gateway go live? | This blocks the Quickstart being truthful. |
-| Is there a path prefix or Host rule? | Tried `/v1`, `/liaas`, `/pteriauth`, `/auth` — all 404. |
-| What replaces the Cloud Run URL? | It is currently documented as the interim host. |
+The cheapest fix is adding `responses` to the OpenAPI spec — the Endpoint Index regenerates from it
+automatically.
 
 ### 2. API key lifecycle and scoping
 
@@ -66,35 +64,25 @@ Three response shapes are documented from live probes. What remains is intent, p
 | Rate-limit rejection shape | Enforcement is confirmed. The response when you cross a limit is not — `429`, or a `200` envelope? |
 | **Leaked internals** | A bad credential returns `The JSON value could not be converted to KakrLabs_SDK_Creator.Core.DTOs.Blocks.Data`, exposing internal namespaces to unauthenticated callers. Should be sanitised. |
 
-### 4. Response schemas for all 43 operations
-
-**Page:** [Endpoint Index](/docs/api-reference/endpoints)
-
-The spec documents requests fully and **no** operation defines a response. The envelope is known to
-be `{ successful, message, data }`; the shape of `data` **per operation** is not documented for a
-single one of the 43.
-
-That means a developer calling `/api/Wallet/balance` cannot know the field name or type of the
-balance without calling it and reading what comes back.
-
-The cheapest fix is to add `responses` to the OpenAPI spec — the Endpoint Index regenerates from it.
-
-### 5. Which endpoints does the Pteri-Auth gateway actually expose?
+### 4. Which endpoints does the gateway actually expose?
 
 **Pages:** [Endpoint Index](/docs/api-reference/endpoints), [SDKs](/docs/sdks-and-integration)
 
 [gcp.pteri.org/docs](https://gcp.pteri.org/docs) documents roughly a dozen `/api/Utilities/`
 operations — `SignMessage`, `VerifyMessage`, `otp`, `totp`, `encode-msg`, `Encrypt`,
-`Generate-passphrase`. **None of them exist on the live API**: each returns `404`, while spec
-operations at the same host return `400`. The published spec contains only two Utilities operations.
+`Generate-passphrase`. The published spec contains only two Utilities operations, so the two
+sources disagree about the surface.
+
+We cannot settle this from outside. The gateway returns `404` for an unrecognised key, so an
+unauthenticated probe cannot tell a missing route from a rejected credential.
 
 | Confirm | |
 | --- | --- |
-| Are those endpoints real? | On an unreleased build behind the gateway, or aspirational? |
-| Which spec is current? | The published one has 43 operations and no Utilities signing routes. |
-| Should the Endpoint Index cover them? | It cannot until they are reachable. |
+| Do the Utilities signing routes exist? | If so, the spec is missing them and the Endpoint Index is incomplete. |
+| Which spec is current? | The published one declares 43 operations and no Utilities signing routes. |
+| Is there a newer spec URL? | The GCP docs link none, and `/swagger/v2/` is a 404. |
 
-### 6. Two pages on kakr.ai still disagree on price
+### 5. Two pages on kakr.ai still disagree on price
 
 **Page:** [Pricing Plans](/docs/product-and-access/pricing-plans)
 
@@ -108,7 +96,7 @@ something the pricing page sells at $1,500.
 This is a website fix, not a docs fix. pteri.org is a third variant again — Starter / Builder / Pro
 / Enterprise, prices masked until signup.
 
-### 7. Support commitments
+### 6. Support commitments
 
 **Pages:** [Status & Support](/docs/help/status-and-support),
 [Enterprise API](/docs/api-reference/enterprise)
@@ -122,7 +110,7 @@ commercial enquiries. What remains:
 | Response targets | None published for any tier. |
 | SLA / uptime | Pteri Enterprise advertises a "Custom SLA" with no target attached. |
 
-### 8. SDK ownership
+### 7. SDK ownership
 
 **Page:** [SDKs & Integration](/docs/sdks-and-integration)
 
@@ -137,7 +125,7 @@ prebuilt SDK yet". So the position is clear — what is unclear is the plan.
 | Generator defaults | The C# client still ships under `Org.OpenAPITools`. |
 | Versioning policy | The spec has declared `1.0` since publication. |
 
-### 9. Statuspage dashboard hygiene
+### 8. Statuspage dashboard hygiene
 
 Not a docs change — these are edits in the Atlassian dashboard, and they surface on
 [/status](/status) and in the docs status panel.
@@ -183,7 +171,8 @@ Each row states what was checked and how, so you can reproduce it.
 | Current plans and prices | Free $0 · Pro $49 · Enterprise Pteri $299, with per-tier rate limits of 3/30/300 per second | kakr.ai/platform#pricing |
 | Are prices public? | On kakr.ai, yes. On pteri.org they are masked until you create an account — the two sites behave differently | Both sites |
 | How are keys issued? | On registration, from the account dashboard. Free tier, no credit card | pteri.org FAQ |
-| Which base URL should developers use? | **`pteri.xyz`** — confirmed by the team. Not yet routing; see item 1. | Team |
+| Which base URL should developers use? | **`pteri.xyz`** — confirmed by the team and verified working in Postman with a valid key. | Team |
+| Why did unauthenticated probes of `pteri.xyz` 404? | The gateway returns **`404` for an unrecognised key**, not `401` — so a rejected credential is indistinguishable from a missing route. Documented as a troubleshooting trap. | Team + probe |
 | Are rate limits enforced? | **Yes** — gateway-enforced per customer, both a per-second rate and a monthly quota. | Team |
 | Which pricing page is canonical? | **kakr.ai/pricing.** The docs now mirror its Identity and BaaS tracks. | Team |
 | Where do non-Enterprise customers get help? | **support.kakr.ai** — knowledge base, AI chat, ticket submission, any plan. | Team, verified live |

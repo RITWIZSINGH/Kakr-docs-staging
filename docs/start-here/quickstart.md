@@ -11,18 +11,13 @@ connectivity check against the Litecoin blockchain, and a real wallet with a rea
 created through the LiaaS API. Every step is a single copy-pasteable command. Nothing here
 is a sandbox mock — these are the same routes you will call in production.
 
-<Callout type="warn" title="About the host these examples use">
+<Callout type="warn" title="A bad key looks exactly like a wrong URL">
 
-<Pill kind="verify">Needs verification</Pill>
+The gateway returns **`404` with an empty body** when it does not recognise your key — not `401`.
+That is the same response a non-existent path gives.
 
-`https://liaas-sdk-919521117286.europe-west1.run.app` answers these calls today — we checked. But
-it is a raw Cloud Run URL and the OpenAPI spec names no host, so nothing marks it as the intended
-*public* endpoint. If your pteri.org dashboard shows a different base URL, use that one. On
-Enterprise with dedicated nodes, you pass your node URL in the credential header instead — see
-[Authentication](/docs/api-reference/authentication).
-
-Everything else on this page — the routes, the header names, the JSON property names — comes
-straight from the spec.
+So if any call below returns `404`, check `$PTERI_API_KEY` before you start doubting the route.
+Every path on this page is real.
 
 </Callout>
 
@@ -51,7 +46,7 @@ never in source control, a browser bundle, or a URL query string.
 export PTERI_API_KEY="paste-your-api-key-here"
 
 # The host that currently serves the API. Override it if your dashboard shows another.
-export BASE_URL="https://liaas-sdk-919521117286.europe-west1.run.app"
+export BASE_URL="https://pteri.xyz"
 ```
 
 Run these in the same terminal you will use for the rest of the page. Every command below
@@ -74,12 +69,16 @@ URL. Whether the value should be the raw key, a `Bearer`-prefixed string, or a n
 your deployment is not settled in the spec. <Pill kind="verify">Needs verification</Pill>
 Start with the raw key exactly as the dashboard shows it.
 
-A `200` with a JSON body of Litecoin block information means you are through. `200` is the
-only status code the spec documents, so we will not tell you which code a failure returns.
-<Pill kind="verify">Needs verification</Pill> Read the failure the way `curl -i` shows it: a
-connection or DNS error means `$BASE_URL` is wrong, and a response that comes back but
-carries no block information means the host is reachable and the header value is the thing
-to fix. Fix it here — every later step uses the same two values.
+A `200` with a JSON body of Litecoin block information means you are through.
+
+If it fails, read it this way:
+
+- **`404` with an empty body** — the gateway rejected your key. Recheck `$PTERI_API_KEY`.
+- **A connection or DNS error** — `$BASE_URL` is wrong.
+- **`200` but no block information** — you are authenticated and the call itself failed. Read the
+  `message` field; see [Errors](/docs/api-reference/errors).
+
+Fix it here — every later step uses the same two values.
 
   </Step>
   <Step title="Create a wallet">
