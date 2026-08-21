@@ -82,19 +82,30 @@ unauthenticated probe cannot tell a missing route from a rejected credential.
 | Which spec is current? | The published one declares 43 operations and no Utilities signing routes. |
 | Is there a newer spec URL? | The GCP docs link none, and `/swagger/v2/` is a 404. |
 
-### 5. Two pages on kakr.ai still disagree on price
+### 5. kakr.ai/pricing sells plans that do not exist
 
 **Page:** [Pricing Plans](/docs/product-and-access/pricing-plans)
 
-Resolved: [kakr.ai/pricing](https://kakr.ai/pricing) is canonical, and the docs now mirror it.
+Resolved: Basic $0 / Pro $49 / Enterprise $299 are the live plans, confirmed from the account
+dashboard. The docs mirror them.
 
-Still live and contradicting it: [kakr.ai/platform#pricing](https://kakr.ai/platform#pricing)
-advertises Free $0 / Pro $49 / Enterprise Pteri $299 at 3, 30 and 300 calls per second. Those plans
-appear nowhere on the pricing page. A customer landing on the platform page is being quoted $49 for
-something the pricing page sells at $1,500.
+Still live and contradicting that:
+[kakr.ai/pricing](https://kakr.ai/pricing) advertises Identity Growth at **$1,500** and Identity
+Scale at **$3,500**, plus a BaaS track at **$2,500** and **$6,000**. None of those appear on the
+dashboard. A prospect landing on that page is quoted $1,500 for something sold at $49.
 
-This is a website fix, not a docs fix. pteri.org is a third variant again — Starter / Builder / Pro
-/ Enterprise, prices masked until signup.
+| Fix | Where |
+| --- | --- |
+| Retire or correct `kakr.ai/pricing` | Website |
+| Decide whether BaaS has separate pricing at all | Product |
+| Publish a monthly quota for Basic, or confirm there is none | Product |
+| Align `pteri.org` naming (Starter / Builder / Pro / Enterprise) | Website |
+
+:::note
+The dashboard copy lists Enterprise as "300,000 API calls **per second**" directly under
+"300 API calls per second". That is a typo in the source — the docs read it as per *month*, matching
+Pro's 30,000/month. Worth fixing on the dashboard.
+:::
 
 ### 6. Support commitments
 

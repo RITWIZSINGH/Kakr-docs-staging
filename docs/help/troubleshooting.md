@@ -101,9 +101,10 @@ If you pass something that is neither a valid key nor a reachable node URL, the 
 
 ## I am being rate limited
 
-Limits are enforced at the gateway per customer, and there are two of them: a per-second rate and
-a **monthly call quota**. On Pteri Basic that quota is only 50 calls a month, so it is usually the
-one you hit first. See [pricing plans](/docs/product-and-access/pricing-plans).
+Limits are enforced at the gateway per customer, and there are two of them: a per-second rate
+(3 / 30 / 300 by tier) and a **monthly call quota** (30,000 on Pro, 300,000 on Enterprise). Sustained
+traffic usually hits the monthly quota long before the per-second rate. See
+[pricing plans](/docs/product-and-access/pricing-plans).
 
 Add retry-with-backoff to any client that can burst. The exact rejection response is not documented
 yet <Pill kind="verify">Needs verification</Pill> — so treat *any* unexpected failure under load as
