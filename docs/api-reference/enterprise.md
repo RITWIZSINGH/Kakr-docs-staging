@@ -29,11 +29,12 @@ If you are **not** an Enterprise customer, these APIs are not accessible.
 
 This page describes the shape of the Enterprise offering. Rate limits are now confirmed; the rest of the commercial terms below are not, so do not quote them or plan capacity against them:
 
-* **Rate limits and throughput.** <Pill kind="confirmed">Confirmed</Pill> **300 requests per second**
-  on Enterprise Pteri, against 3/sec on Free and 30/sec on Pro — see
+* **Rate limits and throughput.** <Pill kind="confirmed">Confirmed</Pill> Pteri Enterprise is
+  **unlimited**; the paid tiers below it run 200/sec (Identity Growth) and 500/sec (Identity Scale),
+  and the BaaS track runs 300/sec and 800/sec — see
   [pricing plans](/docs/product-and-access/pricing-plans). These are enforced at the gateway per
-  customer, not advisory. Still open: the response shape when you cross the limit, and whether a
-  ceiling above 300/sec can be negotiated.
+  customer, not advisory. Still open: whether "unlimited" is genuinely uncapped or fair-use, and the
+  response shape when a metered tier crosses its limit.
 * **SLAs and uptime.** Enterprise Pteri advertises a **Custom SLA**, but no availability target,
   numeric response time, or escalation path is published anywhere — so "custom" means negotiated,
   not defined. pteri.org separately claims support is "available 24/7"; that is a marketing claim,

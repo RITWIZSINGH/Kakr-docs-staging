@@ -1,139 +1,126 @@
 ---
 title: Pricing Plans
 sidebar_label: Pricing plans
-description: The Free, Pro, and Enterprise PTERI plans — API rate limits, agent identities, MFA account coverage, and what each tier includes.
-tags: [unverified]
+description: The Identity Trust Layer and Litecoin BaaS tiers — rate limits, monthly call quotas, and what each plan includes.
 ---
 
-Three plans, priced per month. Every tier includes the same cryptographic model — the differences
-are throughput, how many agent identities you can run, and how many accounts you can protect with
-MFA.
+PTERI sells two infrastructure layers, priced separately.
 
-Plans and prices are set on [kakr.ai](https://kakr.ai/platform#pricing). This page mirrors them;
-check there before you commit to a tier.
+1. **Identity Trust Layer** — cryptographic authentication and identity verification.
+2. **Litecoin Blockchain-as-a-Service (BaaS)** — blockchain infrastructure without running nodes.
 
-## Plan comparison
+Both run on Litecoin-native infrastructure with deterministic cryptographic verification and
+optional MWEB privacy support. Live pricing is at [kakr.ai/pricing](https://kakr.ai/pricing) — this
+page mirrors it.
 
-| | **Free** | **Pro** | **Enterprise Pteri** |
+## Identity Trust Layer
+
+| Feature | Pteri Basic | Identity Growth | Identity Scale | Pteri Enterprise |
+| --- | --- | --- | --- | --- |
+| **Price** | $0/month | $1,500/month | $3,500/month | Custom |
+| **API calls** | 3/sec | 200/sec | 500/sec | Unlimited |
+| **Monthly calls** | 50 | 50,000 | 200,000 | Unlimited |
+| **Litecoin Explorer** | ✔ | ✔ | ✔ | ✔ |
+| **Enhanced Explorer** | ❌ | ✔ | ✔ | ✔ |
+| **PTERI Playground** | ❌ | ✔ | ✔ | ✔ |
+| **PTERI Intelligence** | ❌ | ✔ | ✔ | Unlimited |
+| **SDK integration** | ❌ | ✔ | ✔ | ✔ |
+| **Unlimited API key users** | ❌ | ✔ | ✔ | ✔ |
+| **Customer-controlled payment credentials** | ❌ | ✔ | ✔ | ✔ |
+| **Priority support** | ❌ | ❌ | ✔ | ✔ |
+| **MWEB privacy protocol** | ❌ | ✔ | ✔ | ✔ |
+| **Dedicated instance** | ❌ | ❌ | ❌ | ✔ |
+| **Custom API integrations** | ❌ | ❌ | ❌ | ✔ |
+| **White-label solutions** | ❌ | ❌ | ❌ | ✔ |
+| **Enterprise storage** | ❌ | ❌ | ❌ | ✔ |
+
+### Pteri Basic — $0/month
+
+For developers starting out. **3 calls/sec, 50 calls per month.**
+
+That monthly cap is small by design — it covers the [Quickstart](/docs/quickstart) and a first
+integration, not a running application. Includes the Litecoin-powered explorer, free API testing,
+developer tutorials, and the developer guide.
+
+### Identity Growth — $1,500/month
+
+For startups and growing teams. **200 calls/sec, 50,000 calls per month.**
+
+Adds the enhanced Litecoin explorer, PTERI Playground, PTERI Intelligence, SDK integration,
+unlimited API key users, customer-controlled payment credentials, and the MWEB privacy protocol.
+
+### Identity Scale — $3,500/month
+
+**Most popular.** For scaling teams and AI-agent deployments. **500 calls/sec, 200,000 calls per
+month.**
+
+Everything in Growth, plus priority support and full SDK access.
+
+### Pteri Enterprise — Custom
+
+Agent authorization included. Everything in Growth and Scale, plus unlimited API calls,
+enterprise-grade BaaS, a dedicated instance, custom API integrations, white-label solutions,
+unlimited PTERI Intelligence, and dedicated enterprise storage.
+
+[Talk to the enterprise team](/docs/api-reference/enterprise#need-enterprise-access).
+
+## Litecoin Blockchain-as-a-Service
+
+Scalable Litecoin infrastructure without operating your own nodes.
+
+| Feature | BaaS Developer | BaaS Pro | BaaS Enterprise |
 | --- | --- | --- | --- |
-| **Price** | $0/month | $49/month | $299/month |
-| **API calls** | 3/sec | 30/sec | 300/sec |
-| **Agent identities** | 1 | Up to 10 | Unlimited |
-| **MFA accounts** | Up to 5 | Up to 25 | Up to 200 |
-| **Self-custody wallet** | ✔ | ✔ | ✔ |
-| **All platforms — Android, iOS, Web** | ✔ | ✔ | ✔ |
-| **PTERI lifetime payments** | ❌ | ✔ | ✔ |
-| **Verified agent badge** | ❌ | Coming soon | Coming soon |
-| **Priority support** | ❌ | ✔ | ✔ |
-| **Dedicated support** | ❌ | ❌ | ✔ |
-| **Custom SLA** | ❌ | ❌ | ✔ |
-| **White label options** | ❌ | ❌ | ✔ |
+| **Price** | $2,500/month | $6,000/month | Custom |
+| **API calls** | 300/sec | 800/sec | Unlimited |
+| **Monthly calls** | 100,000 | 1,000,000 | Unlimited |
+| **Litecoin Explorer** | ✔ | ✔ | ✔ |
+| **Enhanced Explorer** | ❌ | ✔ | ✔ |
+| **SDK access** | Basic | Full suite | Full suite |
+| **AI MCP deployment** | ✔ | ✔ | ✔ |
+| **PTERI Playground** | ✔ | ✔ | ✔ |
+| **PTERI Intelligence** | ✔ | ✔ | ✔ |
+| **Support** | Community | Priority | 24/7 dedicated |
+| **Unlimited API key users** | ❌ | ✔ | ✔ |
+| **Node access** | ❌ | ✔ | Dedicated cluster |
+| **Custom smart contracts** | ❌ | ❌ | ✔ |
+| **White-label BaaS** | ❌ | ❌ | ✔ |
+| **SLA guarantee** | ❌ | ❌ | ✔ |
 
-***
+**BaaS Developer — $2,500/month.** For startups needing Litecoin BaaS. Litecoin explorer, basic SDK
+access, community support, Playground, Intelligence, AI MCP deployment.
 
-### Free — $0/month
+**BaaS Pro — $6,000/month.** *Recommended.* Enhanced explorer, full SDK suite, priority support,
+unlimited API key users, privacy-focused payment controls, node access, AI MCP deployment.
 
-For individual developers and testing. No credit card required.
-
-**What you get**
-
-* 3 API calls per second
-* 1 agent identity
-* MFA for up to 5 accounts
-* Self-custody wallet access
-* All platforms — Android, iOS, Web
-
-**Best for**
-
-* Personal testing
-* A first integration
-* Evaluating the platform
-
-***
-
-### Pro — $49/month
-
-For developers and startups running multiple agents in production.
-
-**What you get**
-
-* 30 API calls per second
-* Up to 10 agent identities
-* MFA for up to 25 accounts
-* Verified agent badge *(coming soon)*
-* PTERI lifetime payments
-* Priority support
-
-**Best for**
-
-* Developer studios
-* Startups with agent fleets
-* SMBs deploying AI agents
-
-***
-
-### Enterprise Pteri — $299/month
-
-For organizations deploying AI agents at scale that need full coverage and support.
-
-**What you get**
-
-* 300 API calls per second
-* Unlimited agent identities
-* MFA for up to 200 accounts
-* Custom SLA
-* White label options
-* Dedicated support
-
-**Best for**
-
-* Mid-market organizations
-* Regulated industries
-* RBI and UAE compliance needs
-
-Talk to sales at [contact@kakr.ai](mailto:contact@kakr.ai) or through
-[kakr.ai](https://kakr.ai) → Contact.
-
-***
+**BaaS Enterprise — Custom.** Everything in Developer and Pro, plus unlimited calls, a dedicated
+node cluster, custom smart contracts, white-label BaaS, an SLA guarantee, dedicated enterprise
+storage, and 24/7 dedicated support.
 
 ## Rate limits in practice
 
-The per-second figure is the one that shapes your integration. At Free you have 3 requests per
-second, which is enough to work through the [Quickstart](/docs/quickstart) and build against the
-API, but not enough to serve production traffic.
+The per-second figure shapes your architecture; the **monthly cap** decides whether a tier is
+viable at all. Pteri Basic's 50 calls per month is the one that surprises people — it is an
+evaluation allowance, not a free production tier.
 
-These limits **are enforced** at the API gateway, per customer — they are not advisory. Build
-retry-with-backoff into any client that could burst above its tier.
+Limits are enforced at the API gateway, per customer. They are not advisory, so build
+retry-with-backoff into any client that can burst.
 
-What the API returns when you cross the limit is not documented yet.
+What the API returns when you cross a limit is not documented yet.
 <Pill kind="verify">Needs verification</Pill> See [Errors](/docs/api-reference/errors) for the
-response shapes we have confirmed, and assume nothing about the rejection shape until it is.
+response shapes we have confirmed.
 
-<Callout type="warn" title="kakr.ai lists a second, different set of plans">
+<Callout type="warn" title="kakr.ai/platform shows different numbers">
 
-<Pill kind="verify">Needs verification</Pill>
+[kakr.ai/pricing](https://kakr.ai/pricing) is the real pricing page and is what this page mirrors.
 
-The plans above come from [kakr.ai/platform#pricing](https://kakr.ai/platform#pricing).
-[kakr.ai/pricing](https://kakr.ai/pricing) is a separate page carrying a **different and larger**
-set of tiers at very different price points — an Identity Trust Layer track
-(Pteri Basic $0 · Identity Growth $1,500 · Identity Scale $3,500 · Pteri Enterprise custom) and a
-Blockchain Infrastructure track (BaaS Developer $2,500 · BaaS Pro $6,000 · BaaS Enterprise custom).
+[kakr.ai/platform#pricing](https://kakr.ai/platform#pricing) still advertises a different, cheaper
+set of plans — Free $0 / Pro $49 / Enterprise Pteri $299, with 3, 30 and 300 calls per second. Those
+numbers do not appear on the pricing page and should be corrected on the website, not here.
 
-The two pages disagree on plan names, on price, and on quota. The Free tier is `3/sec` on both, but
-`/pricing` additionally caps it at 50 API calls per month, which `/platform` does not mention.
-
-This page follows `/platform#pricing`. Someone needs to decide which page is canonical and retire
-the other — a customer comparing $49 against $1,500 for what reads as the same product will ask.
+[pteri.org](https://www.pteri.org/) is different again: it uses the names Starter, Builder, Pro and
+Enterprise, and masks the prices until you create an account.
 
 </Callout>
-
-## Blockchain-as-a-Service
-
-[Litecoin BaaS](/docs/platform-capabilities/blockchain-as-a-service) is priced separately from the
-identity plans above, on its own Blockchain Infrastructure track. Because of the conflict noted
-above, this page does not reproduce those figures — read them from
-[kakr.ai/pricing](https://kakr.ai/pricing) and confirm before quoting.
-<Pill kind="verify">Needs verification</Pill>
 
 ## Manage your subscription
 
@@ -141,16 +128,12 @@ All subscriptions are managed from the developer dashboard:
 
 [https://www.pteri.org/Developer/Dashboard/Subscriptions](https://www.pteri.org/Developer/Dashboard/Subscriptions)
 
-From the dashboard you can:
-
-* Upgrade or downgrade plans
-* Manage billing
-* Generate API keys
-* Monitor usage
+From the dashboard you can upgrade or downgrade plans, manage billing, generate API keys, and
+monitor usage.
 
 ## Next
 
 <Cards cols={2}>
   <Card title="PTERI Wallet app" to="/docs/product-and-access/wallet-app">The client your users sign with, and where to download it.</Card>
-  <Card title="SDKs & integration" to="/docs/sdks-and-integration">Pick a language client and start calling the API.</Card>
+  <Card title="SDKs &amp; integration" to="/docs/sdks-and-integration">Pick a language client and start calling the API.</Card>
 </Cards>

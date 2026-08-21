@@ -72,27 +72,31 @@ Enterprise dedicated-node setups are addressed.
 ## The base URL
 
 ```bash
-export BASE_URL="https://liaas-sdk-919521117286.europe-west1.run.app"
+export BASE_URL="https://pteri.xyz"
 ```
 
-That host **does serve the live API**. An unauthenticated `GET /api/Blocks/blockchain-info` against
-it returns a validation error naming `nodeUrlOrApiAccessKey`, which is the API responding, not a
-static file server.
+`pteri.xyz` is the gateway developers should build against. Point your clients there.
 
-<Callout type="warn" title="Confirm this host before you hard-code it">
+<Callout type="warn" title="The gateway is not serving yet">
 
 <Pill kind="verify">Needs verification</Pill>
 
-It works, but it is a raw Cloud Run URL and the spec declares no `servers` block, so nothing marks
-it as *the intended public endpoint*. Treat it as the host that currently answers, not as a stable
-address. Before you bake it into a client, confirm with engineering:
+As of the last check, `https://pteri.xyz` resolves — it answers as Kestrel behind Caddy — but
+returns `404` for every API path, with or without a credential header. `/`, `/swagger`, `/health`
+and all `/api/...` routes are unrouted.
 
-- Whether this is the intended public host, or whether a branded domain is planned.
-- Whether Standard and Enterprise share it. Enterprise dedicated nodes are addressed by passing the
-  node URL in the credential header, so the base URL may differ per tenant.
-- Whether a separate sandbox host exists.
-- Key lifecycle: rotation, revocation, expiry, and how many keys can be active at once.
-- Key scoping: whether one key reaches every operation or is limited to endpoint groups or wallets.
+So do not expect the examples in these docs to run against it today. Until the gateway is live, the
+host that actually answers is:
+
+```bash
+export BASE_URL="https://liaas-sdk-919521117286.europe-west1.run.app"
+```
+
+That is a raw Cloud Run URL and not a long-term address — treat it as a stopgap for local
+development only, and switch to `pteri.xyz` the moment it starts routing.
+
+Enterprise customers running dedicated nodes address them by passing the node URL in the credential
+header instead of changing the base URL.
 
 </Callout>
 

@@ -22,134 +22,131 @@ that is the contract" before it becomes a promise to customers.
 
 </Callout>
 
-## Open — only engineering can answer these
+## Open — still need an answer
 
-### 1. Is the Cloud Run host the intended public base URL?
+### 1. The `pteri.xyz` gateway is not routing
 
-**Pages:** [Quickstart](/docs/quickstart), [Authentication](/docs/api-reference/authentication),
-[Endpoint Index](/docs/api-reference/endpoints), [SDKs](/docs/sdks-and-integration)
+**Pages:** [Authentication](/docs/api-reference/authentication), [Quickstart](/docs/quickstart)
 
-`https://liaas-sdk-919521117286.europe-west1.run.app` demonstrably serves the API. What is unclear is
-whether it is *meant* to be the address customers hard-code — it is a raw Cloud Run URL, and the spec
-declares no `servers` block to bless it.
+`pteri.xyz` is confirmed as the base URL developers should use, and the docs now say so. But the
+host returns `404` for every API path — with and without a credential header, on `/`, `/swagger`,
+`/health` and all `/api/...` routes. It answers as Kestrel behind Caddy, so something is deployed;
+nothing is routed.
+
+Until it serves, every example in these docs fails against the documented host.
 
 | Confirm | |
 | --- | --- |
-| Is this the intended public host? | Or is a branded domain planned? |
-| Sandbox / test host | Does a separate one exist? |
-| Standard vs Enterprise | Same host? Enterprise dedicated nodes are addressed by passing a node URL in the credential header, so the base URL may be per-tenant. |
+| When does the gateway go live? | This blocks the Quickstart being truthful. |
+| Is there a path prefix or Host rule? | Tried `/v1`, `/liaas`, `/pteriauth`, `/auth` — all 404. |
+| What replaces the Cloud Run URL? | It is currently documented as the interim host. |
 
 ### 2. API key lifecycle and scoping
 
 **Page:** [Authentication](/docs/api-reference/authentication)
 
-The value format is now known (see [Resolved](#resolved)). Its lifecycle is not.
+The value format is known — a JWT, sent raw, no `Bearer` prefix. Its lifecycle is not.
 
 | Confirm | |
 | --- | --- |
-| Expiry | The key is a JWT, so it presumably has an `exp`. What is it, and what should a client do on expiry? |
+| Expiry | A JWT has an `exp`. How long, and what should a client do when it passes? |
 | Rotation and revocation | Possible from the dashboard? |
 | Multiple keys | Can more than one be active at once? |
-| Scoping | One key for all 43 operations, or limited to endpoint groups, wallets, or environments? |
+| Scoping | One key for every operation, or limited per endpoint group or wallet? |
 
-### 3. Is the observed error contract the intended one?
+### 3. Two error-contract questions
 
-**Pages:** [Errors](/docs/api-reference/errors), [FAQs](/docs/help/faqs)
+**Pages:** [Errors](/docs/api-reference/errors), [Troubleshooting](/docs/help/troubleshooting)
 
-Three response shapes are now documented from live probes. Two questions remain, and one is a bug.
+Three response shapes are documented from live probes. What remains is intent, plus one defect.
 
 | Confirm | |
 | --- | --- |
-| Is `200` + `successful: false` deliberate? | Returning application failures with a success status is unusual and will trip up clients that branch on status code. |
-| Rate-limit rejections | Limits **are** enforced at the gateway. What does a rejection look like — `429`, or a `200` envelope? |
-| Message stability | Are `message` strings stable enough for clients to match on? |
-| **Leaked internals** | A bad credential returns `The JSON value could not be converted to KakrLabs_SDK_Creator.Core.DTOs.Blocks.Data`. That exposes internal namespaces to unauthenticated callers and should be sanitised. |
+| Is `200` + `successful: false` deliberate? | Returning failures with a success status will trip up any client that branches on the status code. |
+| Rate-limit rejection shape | Enforcement is confirmed. The response when you cross a limit is not — `429`, or a `200` envelope? |
+| **Leaked internals** | A bad credential returns `The JSON value could not be converted to KakrLabs_SDK_Creator.Core.DTOs.Blocks.Data`, exposing internal namespaces to unauthenticated callers. Should be sanitised. |
 
-### 4. Response schemas
+### 4. Response schemas for all 43 operations
 
 **Page:** [Endpoint Index](/docs/api-reference/endpoints)
 
-The spec documents requests fully — headers, query parameters, request body schemas — and mirrors
-onto the Endpoint Index exactly. No operation defines a response schema, and no status beyond `200`.
+The spec documents requests fully and **no** operation defines a response. The envelope is known to
+be `{ successful, message, data }`; the shape of `data` **per operation** is not documented for a
+single one of the 43.
 
-The envelope is now known to be `{ successful, message, data }`. The shape of `data` **per operation**
-is not. Until the spec carries it, any response body a developer sees is behaviour, not a contract.
+That means a developer calling `/api/Wallet/balance` cannot know the field name or type of the
+balance without calling it and reading what comes back.
 
-### 5. Security claims that the spec contradicts
+The cheapest fix is to add `responses` to the OpenAPI spec — the Endpoint Index regenerates from it.
 
-**Page:** [Standard API](/docs/api-reference/standard)
+### 5. Which endpoints does the Pteri-Auth gateway actually expose?
 
-This one is a policy decision, not something research can settle. Three long-standing bullets do not
-match the published surface. They are preserved with the contradiction flagged in place.
+**Pages:** [Endpoint Index](/docs/api-reference/endpoints), [SDKs](/docs/sdks-and-integration)
 
-| Claim | What the spec shows |
-| --- | --- |
-| "No private keys are ever transmitted" | `GET /api/Address/address-private-key` and `-v2` return one; `SignMessagedto.addressPrivatKey` and `SignRawTransactiondto.addressPrivateKey` carry one in the request body |
-| "Verification-only" | The surface includes wallet/address creation, `send-funds-from-wallet`, and `broadcast-transaction` |
-| "API keys only grant access to verification APIs" | Implies scoping; the spec describes one unscoped credential header on 42 of 43 operations |
-
-Decide per bullet: is the route deprecated, restricted, self-hosted-only, or is the claim wrong?
-
-:::note
-`addressPrivatKey` on `SignMessagedto` is spelled without the second `e` in the published spec.
-Confirm whether that typo is live in production before anyone "fixes" it in a client.
-:::
-
-### 6. Which pricing page is canonical? {#pricing}
-
-**Page:** [Pricing Plans](/docs/product-and-access/pricing-plans)
-
-**Kakr's own site publishes three different pricing tables across two pages.** The docs now follow
-[kakr.ai/platform#pricing](https://kakr.ai/platform#pricing), as instructed, but the conflict is
-live and customer-visible right now.
-
-| Source | Tiers |
-| --- | --- |
-| [kakr.ai/platform#pricing](https://kakr.ai/platform#pricing) — *what these docs follow* | Free $0 · Pro $49 · Enterprise Pteri $299 |
-| [kakr.ai/pricing](https://kakr.ai/pricing) — Identity Trust Layer tab | Pteri Basic $0 · Identity Growth $1,500 · Identity Scale $3,500 · Pteri Enterprise custom |
-| [kakr.ai/pricing](https://kakr.ai/pricing) — Blockchain Infrastructure tab | BaaS Developer $2,500 · BaaS Pro $6,000 · BaaS Enterprise custom |
-| [pteri.org](https://www.pteri.org/) | Starter · Builder · Pro · Enterprise, with prices **masked** (`████/mo`) until you create an account |
+[gcp.pteri.org/docs](https://gcp.pteri.org/docs) documents roughly a dozen `/api/Utilities/`
+operations — `SignMessage`, `VerifyMessage`, `otp`, `totp`, `encode-msg`, `Encrypt`,
+`Generate-passphrase`. **None of them exist on the live API**: each returns `404`, while spec
+operations at the same host return `400`. The published spec contains only two Utilities operations.
 
 | Confirm | |
 | --- | --- |
-| Which page is canonical? | $49 and $1,500 are both live for what reads as the same product. |
-| Which plan names ship? | Four different naming schemes are in market simultaneously. |
-| Is the Free tier capped monthly? | `/pricing` says 50 calls/month. `/platform` says only 3/sec, no monthly cap. |
-| Are prices public at all? | pteri.org hides them behind signup; kakr.ai prints them on two pages. |
-| Where does BaaS pricing live? | It exists only on `/pricing`, which is the page not being followed. |
-| "Unlimited" | Used for Enterprise agent identities. Genuinely uncapped, or fair-use? |
-| Rate-limit rejection shape | Enforcement is confirmed; the response you get when you cross the limit is not. |
+| Are those endpoints real? | On an unreleased build behind the gateway, or aspirational? |
+| Which spec is current? | The published one has 43 operations and no Utilities signing routes. |
+| Should the Endpoint Index cover them? | It cannot until they are reachable. |
+
+### 6. Two pages on kakr.ai still disagree on price
+
+**Page:** [Pricing Plans](/docs/product-and-access/pricing-plans)
+
+Resolved: [kakr.ai/pricing](https://kakr.ai/pricing) is canonical, and the docs now mirror it.
+
+Still live and contradicting it: [kakr.ai/platform#pricing](https://kakr.ai/platform#pricing)
+advertises Free $0 / Pro $49 / Enterprise Pteri $299 at 3, 30 and 300 calls per second. Those plans
+appear nowhere on the pricing page. A customer landing on the platform page is being quoted $49 for
+something the pricing page sells at $1,500.
+
+This is a website fix, not a docs fix. pteri.org is a third variant again — Starter / Builder / Pro
+/ Enterprise, prices masked until signup.
 
 ### 7. Support commitments
 
 **Pages:** [Status & Support](/docs/help/status-and-support),
 [Enterprise API](/docs/api-reference/enterprise)
 
-Enterprise enquiries now go through a [HubSpot form](/docs/api-reference/enterprise#need-enterprise-access)
-rather than a published mailbox, which retires the `support@kakrlabs.com` question. What remains:
+Resolved: `support.kakr.ai` is the front door for every plan, and the enterprise form handles
+commercial enquiries. What remains:
 
 | Confirm | |
 | --- | --- |
-| The "24/7" claim | pteri.org states support is available 24/7. Is that contractual, and does it hold per plan? |
-| Response targets | None published. Is there one? |
-| SLA / uptime | Enterprise Pteri advertises a "Custom SLA" with no target attached. Is one actually offered? |
-| Non-enterprise support | The form is for enterprise enquiries. Where does a Free or Pro customer go? |
-| Statuspage component names | The status page still monitors `https://docs.kakrlabs.com`, `https://www.kakr.org` and `https://pteri.kakr.org`. The first is retired and the other two redirect to `kakr.ai`. Rename them in the Statuspage dashboard. |
-| Statuspage sample incident | "This is an example incident" from Feb 2024 is still in the incident history and renders on [/status](/status). Delete it in the dashboard. |
+| The "24/7" claim | pteri.org states support is available 24/7. Contractual, or marketing? |
+| Response targets | None published for any tier. |
+| SLA / uptime | Pteri Enterprise advertises a "Custom SLA" with no target attached. |
 
 ### 8. SDK ownership
 
 **Page:** [SDKs & Integration](/docs/sdks-and-integration)
 
-The clients are generator output (see [Resolved](#resolved)). What is unclear is the intent.
+All eleven clients are OpenAPI Generator 7.14.0 output, and Kakr's own Marketplace docs say "No
+prebuilt SDK yet". So the position is clear — what is unclear is the plan.
 
 | Confirm | |
 | --- | --- |
-| Which clients are supported? | All eleven, or are some unmaintained generator artefacts? |
-| Publishing plan | Python has no PyPI package. Deliberate, or an oversight? |
+| Which clients are supported? | All eleven, or are some unmaintained artefacts? |
+| Publishing plan | Python is absent from PyPI. Deliberate? |
 | npm drift | `liaas-js` (Nov 2024) and `pteri-sdk` (Feb 2026) are two packages of different ages from one repo. Which is current? |
-| Generator defaults | The C# client still ships under the `Org.OpenAPITools` namespace. Intentional? |
-| Versioning policy | The spec has declared version `1.0` since publication. How does it advance? |
+| Generator defaults | The C# client still ships under `Org.OpenAPITools`. |
+| Versioning policy | The spec has declared `1.0` since publication. |
+
+### 9. Statuspage dashboard hygiene
+
+Not a docs change — these are edits in the Atlassian dashboard, and they surface on
+[/status](/status) and in the docs status panel.
+
+| Task | Why |
+| --- | --- |
+| Monitor `docs.kakr.ai` | The component currently reads `https://docs.kakrlabs.com`, which no longer resolves. Note the live host is `docs.kakr.ai` — plural; `doc.kakr.ai` does not resolve. |
+| Rename `www.kakr.org` and `pteri.kakr.org` | Both redirect to `kakr.ai`. |
+| Delete the sample incident | "This is an example incident" from Feb 2024 still renders in the public incident history, complete with Atlassian's template copy. |
 
 ## Resolved from public sources {#resolved}
 
@@ -186,6 +183,11 @@ Each row states what was checked and how, so you can reproduce it.
 | Current plans and prices | Free $0 · Pro $49 · Enterprise Pteri $299, with per-tier rate limits of 3/30/300 per second | kakr.ai/platform#pricing |
 | Are prices public? | On kakr.ai, yes. On pteri.org they are masked until you create an account — the two sites behave differently | Both sites |
 | How are keys issued? | On registration, from the account dashboard. Free tier, no credit card | pteri.org FAQ |
+| Which base URL should developers use? | **`pteri.xyz`** — confirmed by the team. Not yet routing; see item 1. | Team |
+| Are rate limits enforced? | **Yes** — gateway-enforced per customer, both a per-second rate and a monthly quota. | Team |
+| Which pricing page is canonical? | **kakr.ai/pricing.** The docs now mirror its Identity and BaaS tracks. | Team |
+| Where do non-Enterprise customers get help? | **support.kakr.ai** — knowledge base, AI chat, ticket submission, any plan. | Team, verified live |
+| Do the "no private keys transmitted" claims hold? | **Yes, as written about custody.** PTERI never stores or escrows a key. Some operations legitimately accept or return one — signing, UTXO selection — and use it transiently. Reworded on the Standard page rather than flagged. | Team |
 | Is `kakr.org` valid? | It **redirects to kakr.ai**, which publishes `contact@kakr.ai`. Entity is Kakr Labs Inc. | Live fetch |
 | Which docs domain is live? | **`docs.kakr.ai`** — returns 200. Both `docs.kakrlabs.com` and `docs.pteri.org` fail to resolve. The site config previously declared the dead `docs.pteri.org` as its canonical URL. | Live fetch |
 | Support claim | pteri.org states a 24/7 support team plus community support and a Report a Bug page | pteri.org FAQ |

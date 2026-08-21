@@ -2,7 +2,6 @@
 title: API Reference — Standard (PTERI)
 sidebar_label: Standard API
 description: The standard PTERI API reference for identity verification, authentication, signature checks, and payments on shared infrastructure.
-tags: [unverified]
 ---
 
 This is the reference most readers want. Use it unless you are an Enterprise customer running against dedicated nodes — in that case read the [Enterprise reference](/docs/api-reference/enterprise) instead.
@@ -36,17 +35,25 @@ All endpoints are:
 > If a signature is valid, the request succeeds.\
 > If not, it fails — deterministically.
 
-<Callout type="warn" title="Read the three bullets above against the spec">
+<Callout type="info" title="What these three bullets mean, precisely">
 
-<Pill kind="verify">Needs verification</Pill>
+They are about **custody**, not about which bytes cross the wire.
 
-Those bullets describe the intended product posture. The published OpenAPI spec does not match all of them, and we cannot resolve the difference from the spec alone:
+- **"No private keys are ever transmitted"** means PTERI never holds, stores, or escrows your key.
+  There is no server-side vault for an attacker to breach and no custodian who can move funds
+  without you. It does not mean no endpoint ever accepts one: several operations genuinely need the
+  key to do their job — `SignMessage` and `sign-transaction` take one in the request body, and
+  `address-private-key` returns one so you can drive UTXO selection and signing yourself. The key
+  is used for that operation and not retained.
+- **"Verification-only"** describes the authority model. PTERI checks signatures; it never
+  originates authority. State-changing routes like `send-funds-from-wallet` and
+  `broadcast-transaction` still act only on something you signed.
+- **"API keys only grant access to verification APIs"** means the key gets you through the door —
+  it is not itself authority to move value. That still comes from a wallet signature.
 
-* **"No private keys are ever transmitted"** does not hold across the whole surface as published. `GET /api/Address/address-private-key` and `GET /api/Address/address-private-key-v2` return an address private key, and `POST /api/Address/sign-message` and `POST /api/Transactions/sign-transaction` take one in the request body (`addressPrivatKey` and `addressPrivateKey` respectively). Whether those routes are deprecated, restricted, or intended only for self-hosted nodes is not documented.
-* **"Verification-only"** does not describe every operation. The spec includes state-changing routes — creating wallets and addresses, sending funds, broadcasting transactions.
-* **"API keys only grant access to verification APIs"** implies key scoping. Nothing in the spec describes a scope mechanism; there is one credential header, `nodeUrlOrApiAccessKey`, on 42 of 43 operations.
-
-Confirm the intended posture with engineering before you design around any of it. In the meantime, treat the [Endpoint Index](/docs/api-reference/endpoints) as the accurate description of what the API accepts.
+**Practical consequence:** when an operation does require your private key, you are choosing to
+hand it to the API for that call. Send it over TLS, from a backend, never from a browser, and
+prefer the wallet-managed signing routes where you have the option.
 
 </Callout>
 

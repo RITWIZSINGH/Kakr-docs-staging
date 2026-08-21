@@ -64,6 +64,10 @@ Set expectations before you pick one up. All eleven directories are
   `Org.OpenAPITools` namespace rather than a KakrLabs one.
 - **They are transport, not a framework.** Retries, request signing and pagination helpers are not
   part of generator output, so do not assume they are there. Read the directory you plan to use.
+- **Kakr's own Marketplace docs say there is no SDK.** The Pteri-Auth documentation at
+  [gcp.pteri.org/docs](https://gcp.pteri.org/docs) states plainly, under Examples: *"No prebuilt SDK
+  yet."* Read the directories below as generated transport you can build on, not as supported
+  clients.
 - **The two npm packages have diverged in age.** `liaas-js` was last published in November 2024;
   `pteri-sdk` in February 2026. The repository itself was last pushed in December 2025, so what is
   on npm and what is in the repo are not necessarily the same code.

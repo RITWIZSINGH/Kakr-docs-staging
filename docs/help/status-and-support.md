@@ -24,6 +24,7 @@ If everything above is operational, the problem is on your side — the table be
 | Try a request without writing code (Enterprise) | [Postman — Enterprise](https://documenter.getpostman.com/view/32261269/2sA3QterXm#intro) |
 | Read or file an issue against a client library | [liaas-sdk on GitHub](https://github.com/kakrlabs-Inc/liaas-sdk) |
 | Create an account or generate an API key | [pteri.org](https://www.pteri.org/) |
+| Ask a question or raise a ticket | [support.kakr.ai](https://support.kakr.ai) |
 
 ## The resources in full
 
@@ -39,24 +40,24 @@ If everything above is operational, the problem is on your side — the table be
 
 ## Reaching a human
 
-| Route | What it is |
+| Route | Use it for |
 | --- | --- |
-| [Enterprise contact form](/docs/api-reference/enterprise#need-enterprise-access) | Dedicated nodes, private infrastructure, custom SLA, security onboarding. Goes straight to the enterprise team. |
-| [pteri.org](https://www.pteri.org/) → Help (Support) | The product's own support entry point, including a Report a Bug page. |
+| **[support.kakr.ai](https://support.kakr.ai)** | **Start here, on any plan.** Knowledge base, AI chat assistant, and ticket submission. |
+| [Submit a ticket](https://support.kakr.ai) | Anything that needs a person to look at your account. |
+| [Enterprise contact form](/docs/api-reference/enterprise#need-enterprise-access) | Dedicated nodes, custom SLA, security onboarding, procurement. |
 | [GitHub issues](https://github.com/kakrlabs-Inc/liaas-sdk/issues) | Client library bugs. Say which language directory you are using. |
+| [contact@kakr.ai](mailto:contact@kakr.ai) | General company enquiries. `kakr.org` redirects to `kakr.ai`. |
 
-<Callout type="warn" title="Response targets are not documented">
+`support.kakr.ai` is the front door regardless of plan — Free and paid customers alike. The
+enterprise form is for commercial conversations, not for debugging.
+
+<Callout type="warn" title="Response targets are not published">
 
 <Pill kind="verify">Needs verification</Pill>
 
-pteri.org states that its support team is "available 24/7" and that community support exists. That
-is a claim on the marketing site, not a published SLA — no response-time target, escalation path, or
-per-plan support tier is documented anywhere we can check, and neither is a numeric uptime figure.
-Read the status page for actual platform state.
-
-Enterprise enquiries now go through a form rather than a mailbox, so the unconfirmed
-`support@kakrlabs.com` address has been removed from these docs. If a monitored support mailbox
-does exist, it should be added here.
+pteri.org states support is "available 24/7" alongside community support. No response-time target,
+escalation path, or per-plan support tier is published anywhere we can check, and neither is a
+numeric uptime figure. Read the status panel above for actual platform state.
 
 </Callout>
 
