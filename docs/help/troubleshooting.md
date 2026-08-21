@@ -34,15 +34,14 @@ Check `successful` on every response. The reason is in `message`.
 
 ## Every request fails with 400 before anything runs
 
-The credential header is missing. The body names the field:
+A required header or parameter is missing. The body names the offending field:
 
 ```json
-{"errors": {"nodeUrlOrApiAccessKey": ["The nodeUrlOrApiAccessKey field is required."]}}
+{"errors": {"wallet": ["The wallet field is required."]}}
 ```
 
-Send `nodeUrlOrApiAccessKey` as a **request header** on every call. The one exception is
-`GET /api/Wallet/details`, which takes it as a **query parameter** instead. See
-[Authentication](/docs/api-reference/authentication).
+Every request needs `Authorization: Bearer <key>` **and** `Usev2: true`. Wallet-scoped operations
+add a `wallet` header. See [Authentication](/docs/api-reference/authentication).
 
 ## I get a 404 on a route I know exists
 
@@ -67,21 +66,25 @@ if (!ct.includes('application/json')) {
 
 ## A wallet-scoped call fails or returns the wrong wallet
 
-Several operations need a `walletName` header naming which wallet to act on, and it must match
-exactly how the wallet was created — spelling, case, spacing. A missing header surfaces as a `400`
-naming the field; a *wrong* one may return an unhelpful `200` with `successful: false`.
+28 operations need a `wallet` header naming which wallet to act on, and it must match exactly how
+the wallet was created.
 
-Some operations use a header called `wallet` instead of `walletName`. The
-[Authentication](/docs/api-reference/authentication) header table lists which is which.
+The trap: `create-encrypted-wallet` appends a numeric suffix to the name you asked for. Request
+`"quickstart"` and you get back `"quickstart 790621"` — **that** is the wallet name, suffix and
+space included. Use the `name` from the creation response verbatim, not the one you sent.
+
+A missing header surfaces as `400` naming the field; a wrong one usually returns `200` with
+`successful: false`.
 
 ## Operations touching key material fail
 
-Anything that creates addresses, sends funds, or reads private keys needs the wallet unlocked. That
-means an `encryptedPassphrase` header — or on `/api/Address/address-private-key-v2`, a `mnemonics`
+Anything that creates addresses, builds wallet transactions, or reads private keys needs the wallet
+unlocked with an `encryptedPassphrase` header — or on `get-address-privatekey-v2`, a `mnemonics`
 header instead.
 
-Generate the encrypted form rather than sending a raw passphrase. If the wallet was created without
-encryption, these operations cannot unlock it.
+You get that passphrase from `create-encrypted-wallet`, which returns it once in its response
+alongside the mnemonics. If you created the wallet with plain `createwallet` there is no passphrase
+to supply, and these operations cannot unlock it — create an encrypted wallet instead.
 
 ## Wallet balance does not match the sum of its addresses
 
@@ -91,13 +94,11 @@ the full explanation.
 
 ## My credential is rejected but the key looks right
 
-The `nodeUrlOrApiAccessKey` header accepts **either** an API access key **or** a node URL. The key
-is a JWT, sent raw — no `Bearer` prefix, no quotes, no whitespace. A JWT also expires, so a key that
-worked last month may simply have aged out.
+Check both required headers. `Authorization` needs the literal word `Bearer`, a space, then the
+key. `Usev2: true` must also be present — it is on all 52 operations in the collection, and what
+happens without it is undocumented. <Pill kind="verify">Needs verification</Pill>
 
-If you pass something that is neither a valid key nor a reachable node URL, the API may still return
-`200` with an unhelpful parse error in `message` rather than a clean auth failure.
-<Pill kind="verify">Needs verification</Pill>
+Remember a rejected key surfaces as `404`, not `401`.
 
 ## I am being rate limited
 

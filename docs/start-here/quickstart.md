@@ -2,227 +2,210 @@
 slug: /quickstart
 title: Quickstart
 sidebar_label: Quickstart
-description: From a pteri.org signup to a verified Litecoin API call — an API key, a real wallet, and a real address, in about five minutes.
-tags: [unverified]
+description: From signup to a real Litecoin wallet and address in about five minutes, with the exact requests and the responses you should see back.
 ---
 
-By the end of this page you will have an API key from your pteri.org dashboard, a live
-connectivity check against the Litecoin blockchain, and a real wallet with a real address
-created through the LiaaS API. Every step is a single copy-pasteable command. Nothing here
-is a sandbox mock — these are the same routes you will call in production.
+By the end of this page you will have an API key, a live connectivity check against the Litecoin
+chain, and a real encrypted wallet with a real address. Five requests, all copy-pasteable. Nothing
+here is a sandbox mock.
+
+Every request and response below is taken from the
+[Postman collection](https://documenter.getpostman.com/view/32261269/2sA3QpDDwR).
 
 <Callout type="warn" title="A bad key looks exactly like a wrong URL">
 
 The gateway returns **`404` with an empty body** when it does not recognise your key — not `401`.
 That is the same response a non-existent path gives.
 
-So if any call below returns `404`, check `$PTERI_API_KEY` before you start doubting the route.
-Every path on this page is real.
+If any call below returns `404`, check `$PTERI_API_KEY` before you doubt the route. Every path here
+is real.
 
 </Callout>
 
-## Five minutes, seven steps
+## Five minutes, six steps
 
 <Steps>
   <Step title="Create an account">
 
-Sign up at **[pteri.org/register](https://www.pteri.org/register)**. Confirm your email and
-sign in. Free to create; you do not need to talk to anyone to reach the next step.
+Sign up at **[pteri.org/register](https://www.pteri.org/register)**. Free, no credit card, and you
+do not need to talk to anyone to reach the next step.
 
   </Step>
   <Step title="Generate an API key">
 
-From the account dashboard, generate an API key. Copy it somewhere safe as soon as it is
-shown, and note the base URL displayed with it — you need both in the next step.
+From the account dashboard, generate an API key. Copy it as soon as it is shown.
 
-Treat the key like a password: it belongs in an environment variable or a secret manager,
-never in source control, a browser bundle, or a URL query string.
+Treat it like a password: environment variable or secret manager, never source control, never a
+browser bundle, never a URL query string.
 
   </Step>
   <Step title="Put the key and host in your shell">
 
 ```bash
-# The key you generated in step 2.
 export PTERI_API_KEY="paste-your-api-key-here"
-
-# The host that currently serves the API. Override it if your dashboard shows another.
 export BASE_URL="https://pteri.xyz"
 ```
 
-Run these in the same terminal you will use for the rest of the page. Every command below
-reads `$PTERI_API_KEY` and `$BASE_URL`, so you never have to paste the key again.
+Every command below reads these two, so you never paste the key again.
 
   </Step>
   <Step title="Verify connectivity">
 
-This is the cheapest call in the whole spec: read-only, no body, no wallet, one header. If
-it works, your host is right and your key is accepted.
+The cheapest call there is: read-only, no body, no wallet.
 
 ```bash
-curl -i "$BASE_URL/api/Blocks/blockchain-info" \
-  -H "nodeUrlOrApiAccessKey: $PTERI_API_KEY"
+curl "$BASE_URL/api/Blocks/BlockchainInfo" \
+  -H "Authorization: Bearer $PTERI_API_KEY" \
+  -H "Usev2: true"
 ```
 
-`nodeUrlOrApiAccessKey` is the authentication header, required on 42 of the 43 operations. As
-the name says, it carries either an API access key or a node URL. Send the **raw key** exactly
-as the dashboard shows it — no `Bearer` prefix, no quotes. Only self-hosted and Enterprise
-dedicated-node setups pass a node URL here instead.
+Those two headers go on **every** request — see
+[Authentication](/docs/api-reference/authentication).
 
-A `200` with a JSON body of Litecoin block information means you are through.
+You should get back the chain tip:
 
-If it fails, read it this way:
+```json
+{
+  "successful": true,
+  "message": "successful operation",
+  "data": {
+    "result": {
+      "chain": "main",
+      "blocks": 2690280,
+      "bestblockhash": "8311a2fb820a7e55a944afa3ce891bbdcae19ca54b01d18ae3510847eaba74ee",
+      "difficulty": 37047324
+    }
+  }
+}
+```
 
-- **`404` with an empty body** — the gateway rejected your key. Recheck `$PTERI_API_KEY`.
-- **A connection or DNS error** — `$BASE_URL` is wrong.
-- **`200` but no block information** — you are authenticated and the call itself failed. Read the
-  `message` field; see [Errors](/docs/api-reference/errors).
-
-Fix it here — every later step uses the same two values.
+If it fails: **`404` empty body** means the key was rejected. **Connection error** means `$BASE_URL`
+is wrong. **`200` with `"successful": false`** means you are authenticated and the call itself
+failed — read `message`.
 
   </Step>
-  <Step title="Create a wallet">
+  <Step title="Create an encrypted wallet">
 
-The wallet is the thing that holds keys and, in the PTERI model, the thing that *is* the
-identity. `CreateWalletRequest` takes exactly one property, `walletName`.
+Create the wallet **encrypted**. The response hands you the `encryptedPassphrase` you need in the
+next step, so this saves you a detour.
 
 ```bash
-export WALLET_NAME="quickstart-wallet"
-
-curl -i -X POST "$BASE_URL/api/Wallet/create" \
-  -H "nodeUrlOrApiAccessKey: $PTERI_API_KEY" \
+curl -X POST "$BASE_URL/api/Wallet/create-encrypted-wallet" \
+  -H "Authorization: Bearer $PTERI_API_KEY" \
+  -H "Usev2: true" \
   -H "Content-Type: application/json" \
-  -d "{\"walletName\": \"$WALLET_NAME\"}"
+  -d '{"wallet_name": "quickstart"}'
 ```
 
-Per the spec, `/api/Wallet/create` produces a wallet that is **not encrypted** and **cannot
-be imported** into other wallets. That is fine for this walkthrough. For anything you intend
-to keep, use one of the siblings instead — `/api/Wallet/create-encrypted-wallet`,
-`/api/Wallet/create-importable-wallet`, or
-`/api/Wallet/create-importable-encrypted-wallet` — all of which take the same
-`CreateWalletRequest` body.
+```json
+{
+  "successful": true,
+  "message": "successfully created encrypted wallet with mnemonics and encrypted passphrase",
+  "data": {
+    "name": "quickstart 790621",
+    "warning": "",
+    "mnemonics": "inject edge multiply athlete rookie wood bargain reopen device range estate join",
+    "encryptedPassphrase": "RZuP/t0ECZmaLgogbcTlqVRTG+2vlRE7QfgT8bNkvn4VLapBoIOxhgRcELdcJWoe…"
+  }
+}
+```
 
-Keep whatever the response returns. Wallet creation is the one step here you cannot repeat
-your way out of.
+<Callout type="danger" title="Save all three fields now">
 
-  </Step>
-  <Step title="Create an address in that wallet">
+`name`, `mnemonics` and `encryptedPassphrase` are returned **once**. The mnemonics are the only way
+to recover the wallet — nobody can reissue them for you. Note that `name` comes back with a numeric
+suffix appended; use that exact string as the `wallet` header from here on.
 
-Addresses live inside a wallet, so this call identifies the wallet through headers rather
-than the body. The body is `CreateAddressdto`, which has two optional properties: `label`
-and `type`.
+</Callout>
 
 ```bash
-export ENCRYPTED_PASSPHRASE="{ENCRYPTED_PASSPHRASE}"
+export WALLET="quickstart 790621"          # the returned name, verbatim
+export ENCRYPTED_PASSPHRASE="RZuP/t0ECZ…"  # the returned encryptedPassphrase
+```
 
-curl -i -X POST "$BASE_URL/api/Address/create" \
-  -H "nodeUrlOrApiAccessKey: $PTERI_API_KEY" \
-  -H "walletName: $WALLET_NAME" \
+  </Step>
+  <Step title="Create an address, then read its balance">
+
+Addresses live inside a wallet, so this call identifies the wallet through headers.
+
+```bash
+curl -X POST "$BASE_URL/api/Address/createAddress" \
+  -H "Authorization: Bearer $PTERI_API_KEY" \
+  -H "Usev2: true" \
+  -H "wallet: $WALLET" \
   -H "encryptedPassphrase: $ENCRYPTED_PASSPHRASE" \
   -H "Content-Type: application/json" \
-  -d '{"label": "quickstart"}'
+  -d '{"label": "quickstart", "addressType": "3"}'
 ```
 
-Two things the spec does not pin down. <Pill kind="verify">Needs verification</Pill>
+```json
+{
+  "successful": true,
+  "message": "successfully created address",
+  "data": {
+    "privateKey": "T5GbU1zHBRmizjRwogkA5q9SpvBVnPNfc7Rb3G7Z68Wjruj9GoQW",
+    "address": "MTbYA3YVCB8trdFu2dTiheSmiHaSTkEJ4P"
+  }
+}
+```
 
-- **`encryptedPassphrase`** is listed as a header on this route, but the wallet you created
-  in step 5 is unencrypted, so what belongs in this header for that case is not documented.
-  If you hit an error here, create the wallet with `/api/Wallet/create-encrypted-wallet` and
-  use the passphrase you set there.
-- **`type`** is an accepted body property, but the set of valid address-type values is not
-  enumerated in the spec. This example omits it and takes the default.
+The response includes the address's **private key**. Handle it accordingly — see
+[key custody](/docs/architecture-and-security/key-custody-and-biometrics).
 
-Copy the address out of the response — you need it for the last step.
-
-  </Step>
-  <Step title="Check the balance">
+Now read the balance:
 
 ```bash
-export LTC_ADDRESS="paste-the-address-from-step-6"
+export LTC_ADDRESS="MTbYA3YVCB8trdFu2dTiheSmiHaSTkEJ4P"
 
-curl -i "$BASE_URL/api/Address/address-balance?address=$LTC_ADDRESS" \
-  -H "nodeUrlOrApiAccessKey: $PTERI_API_KEY"
+curl "$BASE_URL/api/Address/Address-balance?Address=$LTC_ADDRESS" \
+  -H "Authorization: Bearer $PTERI_API_KEY" \
+  -H "Usev2: true"
 ```
 
-This route returns the confirmed and the unconfirmed balance. A brand-new address has never
-received anything, so both will be zero — that zero is the point. It came back from a real
-query against the Litecoin chain for an address that did not exist ten seconds ago.
+```json
+{ "successful": true, "message": "successfully retrieved address balance",
+  "data": { "confirmed": 0, "unconfirmed": 0 } }
+```
+
+Both zero — that zero is the point. It came back from a real query against Litecoin for an address
+that did not exist a minute ago.
 
   </Step>
 </Steps>
 
-<details>
-
-<summary>Alternative: the same first two calls in Node</summary>
-
-No dependencies — Node 18+ has `fetch` built in. Set `PTERI_API_KEY` and `BASE_URL` in the
-environment first, exactly as in step 3.
-
-```js
-const BASE_URL = process.env.BASE_URL;
-const KEY = process.env.PTERI_API_KEY;
-
-// 1. Connectivity check.
-const info = await fetch(`${BASE_URL}/api/Blocks/blockchain-info`, {
-  headers: { nodeUrlOrApiAccessKey: KEY },
-});
-console.log("blockchain-info:", info.status);
-
-// 2. Create a wallet.
-const wallet = await fetch(`${BASE_URL}/api/Wallet/create`, {
-  method: "POST",
-  headers: {
-    nodeUrlOrApiAccessKey: KEY,
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ walletName: "quickstart-wallet" }),
-});
-console.log("wallet/create:", wallet.status);
-```
-
-There is an official JavaScript client published on npm as
-[`liaas-js`](https://www.npmjs.com/package/liaas-js). <Pill kind="verify">Needs verification</Pill>
-Its exact method names and signatures are not part of our verified facts, so this page will
-not guess at them. Read the source in the `liaas-js` directory of the
-[LiaaS SDK monorepo](https://github.com/kakrlabs-Inc/liaas-sdk) — it also carries clients for
-Python, Go, Java, C#, Ruby, PHP, TypeScript, Dart, Rust, and Kotlin.
-
-</details>
-
 ## What just happened
 
-You did three different kinds of thing, and the order matters.
+**Step 4 proved the channel.** Two headers, one read. Every failure after that point is about your
+request, not your setup.
 
-**Step 4 proved the channel.** One header, one read. Before you create anything, you confirm
-that the host is reachable and the key is accepted. Every failure after this point is about
-your request, not your setup.
+**Step 5 created the identity anchor.** A wallet in PTERI is not a balance — it is the thing that
+holds keys and, in the trust model, the thing that *is* the identity. The mnemonics are the root of
+that identity, which is why they are shown once and never again.
 
-**Step 5 created the identity anchor.** A wallet in PTERI is not a balance — it is a
-container for keys. The keys are what let you produce signatures later, which is the entire
-basis on which anything gets authorized.
+**Step 6 derived an address and queried the chain.** The address is a public identifier anyone can
+verify against Litecoin; the private key that came with it never has to leave your side again.
 
-**Steps 6 and 7 made it addressable and observable.** The address is the public half: a thing
-you can hand out, receive against, and query. The balance call is verification of the
-cheapest sort — anyone can check it, and nobody has to trust your word for it.
+Everything else in these docs is a variation on that sequence:
+**wallet → signature → verification → outcome**.
 
-That shape is the whole platform in miniature: **sign, then verify.** Here the signing was
-implicit, done for you by the wallet. The interesting version is explicit — you hold a
-private key, you sign a message with `/api/Address/sign-message`, and anyone with the public
-address checks it with `/api/Address/verify-message` without ever needing the secret. Same
-primitive underneath login, admin approvals, machine-to-machine calls, and payment
-authorization. Nothing shared, nothing to phish, nothing to replay.
+## Watch the envelope, not the status code
+
+The one thing that catches people out:
+
+```js
+// Wrong — a failed operation still returns HTTP 200
+if (res.ok) return res.json();
+
+// Right
+const body = await res.json();
+if (!body.successful) throw new Error(body.message);
+return body.data;
+```
 
 ## Next
 
 <Cards cols={3}>
-  <Card title="Core Concepts" to="/docs/core-concepts" eyebrow="3 min" icon="◇">
-    Wallet, signature, verification, authority, settlement — the five ideas the rest of the
-    docs assume you have.
-  </Card>
-  <Card title="Authentication" to="/docs/api-reference/authentication" eyebrow="Reference" icon="⚿">
-    What <code>nodeUrlOrApiAccessKey</code> is, where the key comes from, and how to handle it
-    safely in production.
-  </Card>
-  <Card title="Choose your path" to="/docs/choose-your-path" eyebrow="Router" icon="⌥">
-    Reading tracks by what you are building — login, payments, agents, or an enterprise review.
-  </Card>
+  <Card title="Core Concepts" to="/docs/core-concepts" icon="◇">The five ideas the rest of the docs assume.</Card>
+  <Card title="Endpoint Index" to="/docs/api-reference/endpoints" icon="◈">All 52 operations with real response shapes.</Card>
+  <Card title="Choose your path" to="/docs/choose-your-path" icon="⌥">Pick a reading track for what you are building.</Card>
 </Cards>

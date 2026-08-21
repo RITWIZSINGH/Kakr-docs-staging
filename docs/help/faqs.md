@@ -17,9 +17,14 @@ Getting started is simple. Sign up on [pteri.org](https://www.pteri.org/), [crea
 
 <summary>How do I generate a Litecoin address using your API?</summary>
 
-You can generate a Litecoin address by making a POST request to the [`/api/Address/create`](/docs/api-reference/endpoints) endpoint of our API. Per the published spec, the request carries three headers — `nodeUrlOrApiAccessKey`, `walletName`, and `encryptedPassphrase` — and a `CreateAddressdto` body with two optional properties, `label` and `type`.
+You can generate a Litecoin address with a POST to [`/api/Address/createAddress`](/docs/api-reference/endpoints). The request carries `Authorization: Bearer <key>` and `Usev2: true` like every call, plus a `wallet` header naming the wallet and an `encryptedPassphrase` header to unlock it. The body takes `label` and `addressType`.
 
-An older version of this answer mentioned a `Usev2` parameter taking **true** or **yes**. No such parameter appears in the published spec, and the spec defines no response schema, so what the response body contains is not documented either. <Pill kind="verify">Needs verification</Pill>
+The response returns both the new address **and its private key**:
+
+```json
+{"successful": true, "message": "successfully created address",
+ "data": {"privateKey": "T5GbU1zH…", "address": "MTbYA3YVCB8trdFu2dTiheSmiHaSTkEJ4P"}}
+```
 
 </details>
 
@@ -27,7 +32,12 @@ An older version of this answer mentioned a `Usev2` parameter taking **true** or
 
 <summary>How do I check the balance of a Litecoin address?</summary>
 
-To check the balance of a Litecoin address, make a GET request to the [`/api/Address/address-balance`](/docs/api-reference/endpoints) endpoint with the address as a parameter. The response will include the current balance of the specified address.
+GET [`/api/Address/Address-balance?Address=<addr>`](/docs/api-reference/endpoints). You get back confirmed and unconfirmed separately:
+
+```json
+{"successful": true, "message": "successfully retrieved address balance",
+ "data": {"confirmed": 0.00061, "unconfirmed": 0}}
+```
 
 </details>
 
@@ -35,7 +45,11 @@ To check the balance of a Litecoin address, make a GET request to the [`/api/Add
 
 <summary>How do I check the balance of a Litecoin wallet?</summary>
 
-To check the balance of a Litecoin wallet, make a GET request to the [`/api/Wallet/balance`](/docs/api-reference/endpoints) endpoint. The wallet is identified by the `walletName` header, alongside `nodeUrlOrApiAccessKey`. The response will include the current balance of the specified wallet.
+GET [`/api/Wallet/get-wallet-balance`](/docs/api-reference/endpoints), with the wallet named in the `wallet` header. `data` is a bare number:
+
+```json
+{"successful": true, "message": "successfully retrieved wallet balance", "data": 0.0054834}
+```
 
 </details>
 
@@ -61,7 +75,7 @@ Our API can be accessed using any programming language that can make HTTP reques
 
 When you restart your Blockchain node, the wallet is not loaded automatically for security and resource management reasons. This ensures that only explicitly requested wallets are loaded, reducing the risk of unauthorized access and resource consumption.
 
-This answer used to point at a `/api/Wallet/load-wallet` endpoint taking the wallet name as a `filename` value. **That route does not exist.** It is absent from the published OpenAPI spec, and requesting it against the live API returns `404` — the same response as a made-up path. It is presumably a node-level RPC rather than a LiaaS API call. Do not build against it; see the [Endpoint Index](/docs/api-reference/endpoints) for the 43 operations the API does serve.
+Load it with a POST to [`/api/Wallet/load-wallet`](/docs/api-reference/endpoints), passing the wallet name in the body.
 
 </details>
 
@@ -81,7 +95,7 @@ Match on the error message text. The [Developer FAQs and Error Handling](/docs/h
 
 Watch the status code carefully: **a failed request usually still returns `200`.** The API wraps responses in `{"successful": …, "message": …, "data": …}`, and an operation that ran and failed comes back with `"successful": false` and the reason in `message`. Branch on that field, not on the status code. A missing required header is the exception — that returns `400` with a `problem+json` body.
 
-These shapes were observed against the live API rather than published in the spec, so treat them as accurate-today, not contractual. <Pill kind="verify">Needs verification</Pill> The [error reference](/docs/api-reference/errors) has all three shapes side by side.
+The [error reference](/docs/api-reference/errors) has all three response shapes side by side.
 
 </details>
 

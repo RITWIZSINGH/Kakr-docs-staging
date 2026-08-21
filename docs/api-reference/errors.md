@@ -5,9 +5,9 @@ description: The error messages the LiaaS API actually returns, what causes each
 tags: [unverified]
 ---
 
-The published OpenAPI spec declares only `200` for all 43 operations, so it is no help here. The
-three response shapes below were instead **observed directly against the live API**, and they are
-the ones your error handling has to cope with.
+Three response shapes, confirmed against the live API and the published
+[Postman collection](https://documenter.getpostman.com/view/32261269/2sA3QpDDwR). These are the
+ones your error handling has to cope with.
 
 <Callout type="warn" title="Observed, not contractual">
 
@@ -33,7 +33,7 @@ emits for model validation. Field names map to the parameter that failed.
   "title": "One or more validation errors occurred.",
   "status": 400,
   "errors": {
-    "nodeUrlOrApiAccessKey": ["The nodeUrlOrApiAccessKey field is required."]
+    "wallet": ["The wallet field is required."]
   },
   "traceId": "00-c5d97c3b0ab034f8600d17e42c1641ee-670c24216d838de4-01"
 }

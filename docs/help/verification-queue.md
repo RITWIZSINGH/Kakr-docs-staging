@@ -24,20 +24,21 @@ that is the contract" before it becomes a promise to customers.
 
 ## Open — still need an answer
 
-### 1. Response schemas for all 43 operations
+### 1. Response schemas for the 23 undocumented operations
 
 **Page:** [Endpoint Index](/docs/api-reference/endpoints)
 
-The spec documents requests fully — headers, query parameters, request body schemas — and **no**
-operation defines a response. The envelope is known to be `{ successful, message, data }`; what sits
-inside `data` is undocumented for every single one of the 43.
+Largely closed. The [Postman collection](https://documenter.getpostman.com/view/32261269/2sA3QpDDwR)
+publishes real response examples for **29 of 52** operations, and the reference now carries them.
 
-A developer calling `/api/Wallet/balance` cannot know the field name or type of the balance without
-calling it and reading what comes back. Same for `address-details`, `transaction-details`, and the
-rest.
+The remaining 23 are documented request-side only — mostly wallet creation
+(`createwallet`, `create-importable-wallet`, `load-wallet`, `import-wallet`), the
+`wallet-transaction-builder` v2–v4 family, the Explorer lookups, and most Utilities helpers.
 
-The cheapest fix is adding `responses` to the OpenAPI spec — the Endpoint Index regenerates from it
-automatically.
+| Confirm | |
+| --- | --- |
+| Add examples for the missing 23 | Saving one example per request in Postman publishes it automatically. |
+| Is `data` typed per operation? | It is polymorphic across the 29 — object, string, array, number, `null`. |
 
 ### 2. API key lifecycle and scoping
 
@@ -64,23 +65,23 @@ Three response shapes are documented from live probes. What remains is intent, p
 | Rate-limit rejection shape | Enforcement is confirmed. The response when you cross a limit is not — `429`, or a `200` envelope? |
 | **Leaked internals** | A bad credential returns `The JSON value could not be converted to KakrLabs_SDK_Creator.Core.DTOs.Blocks.Data`, exposing internal namespaces to unauthenticated callers. Should be sanitised. |
 
-### 4. Which endpoints does the gateway actually expose?
+### 4. Reconcile the OpenAPI spec with the real API
 
-**Pages:** [Endpoint Index](/docs/api-reference/endpoints), [SDKs](/docs/sdks-and-integration)
+**Pages:** [Authentication](/docs/api-reference/authentication), [SDKs](/docs/sdks-and-integration)
 
-[gcp.pteri.org/docs](https://gcp.pteri.org/docs) documents roughly a dozen `/api/Utilities/`
-operations — `SignMessage`, `VerifyMessage`, `otp`, `totp`, `encode-msg`, `Encrypt`,
-`Generate-passphrase`. The published spec contains only two Utilities operations, so the two
-sources disagree about the surface.
+Resolved: the docs now follow the Postman collection. The
+[published spec](https://liaas-sdk-919521117286.europe-west1.run.app/swagger/v1/swagger.json) is a
+different API — different paths, a different credential header (`nodeUrlOrApiAccessKey` rather than
+`Authorization: Bearer`), no `Usev2`, and no response schemas.
 
-We cannot settle this from outside. The gateway returns `404` for an unrecognised key, so an
-unauthenticated probe cannot tell a missing route from a rejected credential.
+That spec is titled `KakrLabs-SDK-Creator` and generated the eleven SDK clients, so **those clients
+target the wrong contract**.
 
 | Confirm | |
 | --- | --- |
-| Do the Utilities signing routes exist? | If so, the spec is missing them and the Endpoint Index is incomplete. |
-| Which spec is current? | The published one declares 43 operations and no Utilities signing routes. |
-| Is there a newer spec URL? | The GCP docs link none, and `/swagger/v2/` is a 404. |
+| Is the spec meant to be public at all? | Our SDK page links it, and it describes a surface customers cannot call. |
+| Do the generated SDKs work against the product API? | They were built from the spec, so probably not without patching. |
+| Should a spec be generated from the collection? | Postman can export OpenAPI — that would give one source of truth. |
 
 ### 5. kakr.ai/pricing sells plans that do not exist
 
@@ -136,16 +137,16 @@ prebuilt SDK yet". So the position is clear — what is unclear is the plan.
 | Generator defaults | The C# client still ships under `Org.OpenAPITools`. |
 | Versioning policy | The spec has declared `1.0` since publication. |
 
-### 8. Two request-side gaps that block the Quickstart
+### 8. Valid `addressType` values
 
-**Page:** [Quickstart](/docs/quickstart), step 6
+**Page:** [Quickstart](/docs/quickstart), [Endpoint Index](/docs/api-reference/endpoints)
 
-Both surfaced while writing the walkthrough and neither is answerable from the spec.
+Half closed. The passphrase question is answered: `create-encrypted-wallet` returns the
+`encryptedPassphrase` in its response, so the Quickstart no longer has a chicken-and-egg problem.
 
-| Confirm | |
-| --- | --- |
-| `encryptedPassphrase` on an unencrypted wallet | `/api/Address/create` lists the header as required, but `/api/Wallet/create` produces an unencrypted wallet. What goes in the header in that case — empty string, omitted, or is the pairing simply invalid? |
-| Valid `type` values on `CreateAddressdto` | `type` is an accepted body property with no enumerated values anywhere in the spec. What are the legal address types, and what is the default? |
+Still open: `createAddress` takes an `addressType` body property, and the collection only ever shows
+`"3"`. The set of legal values and what each maps to (legacy, P2SH, bech32?) is not documented
+anywhere, and neither is the default when it is omitted.
 
 ### 9. Statuspage dashboard hygiene
 
