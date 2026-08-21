@@ -2,7 +2,6 @@
 title: Authentication
 sidebar_label: Authentication
 description: How to get a PTERI API key and pass it on every request using the nodeUrlOrApiAccessKey header.
-tags: [unverified]
 ---
 
 Every call to the LiaaS API carries a credential. There is one credential header, and almost every operation expects it.

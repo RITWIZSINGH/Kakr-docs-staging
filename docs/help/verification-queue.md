@@ -136,7 +136,18 @@ prebuilt SDK yet". So the position is clear — what is unclear is the plan.
 | Generator defaults | The C# client still ships under `Org.OpenAPITools`. |
 | Versioning policy | The spec has declared `1.0` since publication. |
 
-### 8. Statuspage dashboard hygiene
+### 8. Two request-side gaps that block the Quickstart
+
+**Page:** [Quickstart](/docs/quickstart), step 6
+
+Both surfaced while writing the walkthrough and neither is answerable from the spec.
+
+| Confirm | |
+| --- | --- |
+| `encryptedPassphrase` on an unencrypted wallet | `/api/Address/create` lists the header as required, but `/api/Wallet/create` produces an unencrypted wallet. What goes in the header in that case — empty string, omitted, or is the pairing simply invalid? |
+| Valid `type` values on `CreateAddressdto` | `type` is an accepted body property with no enumerated values anywhere in the spec. What are the legal address types, and what is the default? |
+
+### 9. Statuspage dashboard hygiene
 
 Not a docs change — these are edits in the Atlassian dashboard, and they surface on
 [/status](/status) and in the docs status panel.

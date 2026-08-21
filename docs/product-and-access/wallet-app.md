@@ -2,7 +2,6 @@
 title: PTERI Wallet App
 sidebar_label: Wallet app
 description: The PTERI Wallet keeps private keys on the device and signs challenges for login, payments, and identity-bound intent.
-tags: [unverified]
 ---
 
 The PTERI Wallet is the core client application used for identity verification, authentication, and transaction authorization within the PTERI platform.

@@ -63,11 +63,10 @@ curl -i "$BASE_URL/api/Blocks/blockchain-info" \
   -H "nodeUrlOrApiAccessKey: $PTERI_API_KEY"
 ```
 
-`nodeUrlOrApiAccessKey` is the authentication header, and it is required on 42 of the 43
-operations in the spec. As the name suggests it carries either an API access key or a node
-URL. Whether the value should be the raw key, a `Bearer`-prefixed string, or a node URL for
-your deployment is not settled in the spec. <Pill kind="verify">Needs verification</Pill>
-Start with the raw key exactly as the dashboard shows it.
+`nodeUrlOrApiAccessKey` is the authentication header, required on 42 of the 43 operations. As
+the name says, it carries either an API access key or a node URL. Send the **raw key** exactly
+as the dashboard shows it — no `Bearer` prefix, no quotes. Only self-hosted and Enterprise
+dedicated-node setups pass a node URL here instead.
 
 A `200` with a JSON body of Litecoin block information means you are through.
 
