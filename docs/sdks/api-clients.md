@@ -32,51 +32,78 @@ whether a breaking change gets a new one, is not documented anywhere we can veri
 
 ### Official SDKs
 
-Eleven language directories live in the [SDK monorepo](https://github.com/kakrlabs-Inc/liaas-sdk).
+**Only one published client actually works against the product API.** We verified this by
+intercepting each client's outbound request and comparing it to the Postman collection — no API key
+needed, since a client built against the wrong contract fails on the host, the paths and the auth
+header regardless of credentials.
 
-| Language | Directory | On a package registry? |
+| Package | Verdict | Why |
 | --- | --- | --- |
-| JavaScript | [liaas-js](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-js) | npm [`liaas-js`](https://www.npmjs.com/package/liaas-js) — v2.0.4 |
-| TypeScript | [liaas-typescript](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-typescript) | npm [`pteri-sdk`](https://www.npmjs.com/package/pteri-sdk) — v1.1.2 |
-| Python | [liaas-python](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-python) | **Not on PyPI** — install from source |
-| Go | [liaas-go-lang](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-go-lang) | Source only |
-| Java | [liaas-java](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-java) | Source only |
-| C# (.NET) | [liaas-csharp](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-csharp) | Source only |
-| Ruby | [liaas-ruby](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-ruby) | Source only |
-| PHP | [liaas-php](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-php) | Source only |
-| Dart | [liaas-dart](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-dart) | Source only |
-| Rust | [liaas-rust](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-rust) | Source only |
-| Kotlin | [liaas-kotlin](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-kotlin) | Source only |
+| npm [`liaas-js`](https://www.npmjs.com/package/liaas-js) **v2.0.4** | <Pill kind="confirmed">Works</Pill> | Hand-written. Correct host, paths, `Authorization: Bearer` + `Usev2`, and wallet headers. |
+| npm [`pteri-sdk`](https://www.npmjs.com/package/pteri-sdk) **v1.1.2** | <Pill kind="verify">Does not work</Pill> | Generated from the SDK-Creator spec. Sends `nodeUrlOrApiAccessKey`, never `Authorization`. |
+| [`liaas-python`](https://github.com/kakrlabs-Inc/liaas-sdk/tree/main/liaas-python) | <Pill kind="verify">Does not work</Pill> | Same generated contract, and not published to PyPI. |
+| The other eight language directories | <Pill kind="verify">Unverified</Pill> | Same generator output; assume the same problem until tested. |
 
-The "Source only" rows are what we could find on the public registries — npm and PyPI were checked
-directly. Absence there is not proof a package does not exist under another name.
+Counter-intuitively, the **older** package is the working one. `liaas-js` was published in November
+2024 and `pteri-sdk` in February 2026, so picking "the newest" gets you the broken client.
+
+### Use this one
+
+```bash
+npm install liaas-js
+```
+
+```js
+const LiaaS = require('liaas-js');
+const client = new LiaaS(process.env.PTERI_API_KEY);
+
+// Pass the key as the first argument to every method.
+const balance = await client.walletBalance(process.env.PTERI_API_KEY, 'my-wallet');
+```
+
+It defaults to `https://pteri.xyz/api` with no configuration, exposes about 60 methods, and handles
+the `wallet` and `encryptedPassphrase` headers for you. Pass a **node URL** instead of a key as that
+first argument and it targets that node directly, sending no auth headers — the Enterprise path.
+
+<Callout type="warn" title="It turns a rejected key into a confusing message">
+
 <Pill kind="verify">Needs verification</Pill>
 
-### What these clients actually are
+`liaas-js` converts any `404` into
+`"<method> is currently unavailable on the node you are attempting to access."`
 
-Set expectations before you pick one up. All eleven directories are
-[OpenAPI Generator](https://openapi-generator.tech) 7.14.0 output, generated from the same spec:
+Because [a rejected API key also returns `404`](/docs/api-reference/authentication), a bad key reads
+as though the service is down. If you see that message, check your key before you check the status
+page.
 
-- **No base URL is baked in.** Because the spec has no `servers` block, every generated client
-  defaults to `http://localhost` — confirmed in the JavaScript `ApiClient` and the TypeScript
-  `runtime.ts`. You must configure the host yourself on every client.
-- **Generator defaults are still in place.** The C# client, for instance, ships under the
-  `Org.OpenAPITools` namespace rather than a KakrLabs one.
-- **They are transport, not a framework.** Retries, request signing and pagination helpers are not
-  part of generator output, so do not assume they are there. Read the directory you plan to use.
-- **Kakr's own Marketplace docs say there is no SDK.** The Pteri-Auth documentation at
-  [gcp.pteri.org/docs](https://gcp.pteri.org/docs) states plainly, under Examples: *"No prebuilt SDK
-  yet."* Read the directories below as generated transport you can build on, not as supported
-  clients.
-- **The two npm packages have diverged in age.** `liaas-js` was last published in November 2024;
-  `pteri-sdk` in February 2026. The repository itself was last pushed in December 2025, so what is
-  on npm and what is in the repo are not necessarily the same code.
+</Callout>
 
-One file is hand-written rather than generated: `liaas-typescript/apis/WalletConnector.ts`, a
-browser SDK that opens the PTERI web wallet in a popup to connect and sign. It is the only client
-code with real hosts compiled in — a relay at `https://pteriwalletapixx121.pteri.org/relay` and the
-wallet origin `https://pteri-web-wallet-919521117286.europe-west1.run.app`. That is a separate
-subsystem from the REST API; it is not a LiaaS base URL.
+### Why the generated clients do not work
+
+They were produced by [OpenAPI Generator](https://openapi-generator.tech) 7.14.0 from the
+[published spec](https://liaas-sdk-919521117286.europe-west1.run.app/swagger/v1/swagger.json), which
+describes the SDK-Creator service rather than the product API. Three consequences, all fatal:
+
+- **Wrong auth.** They send `nodeUrlOrApiAccessKey`; the gateway wants `Authorization: Bearer` plus
+  `Usev2`. No amount of configuration fixes this — the header name is baked into every operation.
+- **Wrong paths.** `/api/Wallet/balance` instead of `/api/Wallet/get-wallet-balance`,
+  `/api/Address/create` instead of `/api/Address/createAddress`, and so on throughout.
+- **No base URL.** The spec declares no `servers` block, so they default to `http://localhost`.
+
+The Python package also carries the generator's default namespace, `openapi_client`, rather than a
+KakrLabs one.
+
+### Re-checking this yourself
+
+`scripts/verify-sdks.mjs` in the docs repo re-runs the whole check:
+
+```bash
+npm install liaas-js pteri-sdk
+node scripts/verify-sdks.mjs
+```
+
+It exits non-zero if a client that is supposed to work has drifted. Worth running after any SDK
+release.
 
 If your language isn't listed, generate a client from the OpenAPI spec above, or open a request on
 the repo.

@@ -126,16 +126,24 @@ commercial enquiries. What remains:
 
 **Page:** [SDKs & Integration](/docs/sdks-and-integration)
 
-All eleven clients are OpenAPI Generator 7.14.0 output, and Kakr's own Marketplace docs say "No
-prebuilt SDK yet". So the position is clear — what is unclear is the plan.
+Largely answered by testing. Each published client was driven with its outbound request intercepted
+and compared against the product API:
+
+| Package | Result |
+| --- | --- |
+| npm `liaas-js` 2.0.4 | **Works.** Hand-written, correct host, paths and headers. |
+| npm `pteri-sdk` 1.1.2 | **Broken.** Generated; sends `nodeUrlOrApiAccessKey`, never `Authorization`. |
+| `liaas-python` | **Broken**, same cause, and absent from PyPI. |
+
+Re-runnable via `scripts/verify-sdks.mjs`. What remains is a decision, not a discovery:
 
 | Confirm | |
 | --- | --- |
-| Which clients are supported? | All eleven, or are some unmaintained artefacts? |
-| Publishing plan | Python is absent from PyPI. Deliberate? |
-| npm drift | `liaas-js` (Nov 2024) and `pteri-sdk` (Feb 2026) are two packages of different ages from one repo. Which is current? |
-| Generator defaults | The C# client still ships under `Org.OpenAPITools`. |
-| Versioning policy | The spec has declared `1.0` since publication. |
+| Retire or fix `pteri-sdk`? | It is newer than `liaas-js`, so developers reasonably pick the broken one. |
+| Publish a Python client? | Nothing is on PyPI, and the source client would not work if installed. |
+| Regenerate the other eight? | Same generator, same wrong spec — assume broken. |
+| Rename `openapi_client`? | The Python package still ships the generator's default namespace. |
+| Fix the `liaas-js` 404 message? | It reports a rejected key as "currently unavailable on the node", which points users at the status page instead of their credentials. |
 
 ### 8. Valid `addressType` values
 
