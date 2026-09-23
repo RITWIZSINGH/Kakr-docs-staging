@@ -98,12 +98,14 @@ KakrLabs one.
 `scripts/verify-sdks.mjs` in the docs repo re-runs the whole check:
 
 ```bash
-npm install liaas-js pteri-sdk
 node scripts/verify-sdks.mjs
 ```
 
-It exits non-zero if a client that is supposed to work has drifted. Worth running after any SDK
-release.
+No setup and no API key. It installs the packages into a temp directory of its own, inspects what
+each one puts on the wire, and cleans up — nothing is added to this project's dependencies.
+
+It exits non-zero only if a client that is *supposed* to work has stopped speaking the product API,
+so it is safe to wire into CI. Worth running after any SDK release.
 
 If your language isn't listed, generate a client from the OpenAPI spec above, or open a request on
 the repo.
